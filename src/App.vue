@@ -44,4 +44,6 @@ import EventModifier from './components/practices/basic/EventModifier.vue'
   <EventModifier />
 </template>
 
-<style scoped></style>
+<style>
+@import '@/assets/practice.css';
+</style>
