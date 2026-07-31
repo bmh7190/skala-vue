@@ -15,14 +15,15 @@ import VueMemo from './components/practices/basic/VueMemo.vue'
 import VueOnce from './components/practices/basic/VueOnce.vue'
 import VuePre from './components/practices/basic/VuePre.vue'
 import VueCloak from './components/practices/basic/VueCloak.vue'
+import EventBasic from './components/practices/basic/EventBasic.vue'
+import EventObject from './components/practices/basic/EventObject.vue'
+import EventModifier from './components/practices/basic/EventModifier.vue'
 </script>
 
 <template>
-  <div>
-    <SampleOne />
-  </div>
-
+  <SampleOne />
   <SampleTwo />
+
   <VueHtmlXss />
   <VueHTML />
   <VueText />
@@ -37,6 +38,10 @@ import VueCloak from './components/practices/basic/VueCloak.vue'
   <VueCloak />
   <VueOnce />
   <VueMemo />
+
+  <EventBasic />
+  <EventObject />
+  <EventModifier />
 </template>
 
 <style scoped></style>
