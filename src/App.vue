@@ -18,6 +18,10 @@ import VueCloak from './components/practices/basic/VueCloak.vue'
 import EventBasic from './components/practices/basic/EventBasic.vue'
 import EventObject from './components/practices/basic/EventObject.vue'
 import EventModifier from './components/practices/basic/EventModifier.vue'
+import ModelBasic from './components/practices/basic/ModelBasic.vue'
+import ModelForm from './components/practices/basic/ModelForm.vue'
+import ModelModifier from './components/practices/basic/ModelModifier.vue'
+import StyleScoped from './components/practices/basic/StyleScoped.vue'
 </script>
 
 <template>
@@ -42,6 +46,11 @@ import EventModifier from './components/practices/basic/EventModifier.vue'
   <EventBasic />
   <EventObject />
   <EventModifier />
+
+  <ModelBasic />
+  <ModelForm />
+  <ModelModifier />
+  <StyleScoped />
 </template>
 
 <style>
