@@ -22,6 +22,7 @@ import ModelBasic from './components/practices/basic/ModelBasic.vue'
 import ModelForm from './components/practices/basic/ModelForm.vue'
 import ModelModifier from './components/practices/basic/ModelModifier.vue'
 import StyleScoped from './components/practices/basic/StyleScoped.vue'
+import WeatherMockup from './components/practices/exercise/WeatherMockup.vue'
 </script>
 
 <template>
@@ -51,8 +52,11 @@ import StyleScoped from './components/practices/basic/StyleScoped.vue'
   <ModelForm />
   <ModelModifier />
   <StyleScoped />
+
+  <!-- <WeatherMockup /> -->
 </template>
 
 <style>
 @import '@/assets/practice.css';
+/* @import '@/assets/exercise.css'; */
 </style>
