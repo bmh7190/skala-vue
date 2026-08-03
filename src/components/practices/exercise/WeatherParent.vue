@@ -11,10 +11,9 @@ const weatherList = ref([
 ])
 
 const searchQuery = ref('')
+const selectedCityId = ref(null)
 const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
-const showDetail = (cityName, status) => {
-  window.alert(`${cityName}의 현재 날시는 [${status}] 상태입니다.`)
-}
+
 const filteredWeatherList = computed(() => {
   const query = searchQuery.value.trim()
 
@@ -25,8 +24,22 @@ const filteredWeatherList = computed(() => {
   return weatherList.value.filter((item) => item.name.includes(query))
 })
 
+const selectCity = (item) => {
+  selectedCityId.value = item.id
+  selectedCityInfo.value = `${item.name}이 선택되었습니다.`
+}
+
+const showDetail = (cityName, status) => {
+  window.alert(`${cityName}의 현재 날씨는 [${status}] 상태입니다.`)
+}
+
+watch(searchQuery, () => {
+  selectedCityId.value = null
+  selectedCityInfo.value = '카드를 클릭하거나 검색해보세요.'
+})
+
 watch(selectedCityInfo, (newInfo) => {
-  console.log(`[watch 감지] 상태 바 문구가 업데이트 되었습니다 -> ${newInfo}`)
+  console.log(`[watch 감지] 상태 바 문구가 업데이트되었습니다. -> ${newInfo}`)
 })
 
 watchEffect(() => {
@@ -49,15 +62,16 @@ watchEffect(() => {
     </BaseDashboardCard>
 
     <BaseDashboardCard>
-      <h3>🏙️ 지역별 날시 현황</h3>
+      <h3>🏙️ 지역별 날씨 현황</h3>
+
       <WeatherCard
         v-for="item in filteredWeatherList"
         :key="item.id"
         :city-item="item"
-        @select-card="(msg) => (selectedCityInfo = msg)"
+        :is-selected="selectedCityId === item.id"
+        @select-card="selectCity(item)"
         @click-detail="showDetail"
-      >
-      </WeatherCard>
+      />
 
       <p
         v-if="filteredWeatherList.length === 0"
