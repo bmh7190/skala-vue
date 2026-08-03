@@ -1,4 +1,6 @@
 <script setup>
+import LifeCycleChild from './components/practices/component/LifeCycleChild.vue'
+import LifecycleParent from './components/practices/component/LifecycleParent.vue'
 import ComputedBasic from './components/practices/composition/ComputedBasic.vue'
 import ReactiveReactive from './components/practices/composition/ReactiveReactive.vue'
 import ReactiveRef from './components/practices/composition/ReactiveRef.vue'
@@ -35,6 +37,7 @@ import WeatherComposition from './components/practices/exercise/WeatherCompositi
 
     <h1>3. Component Lifecycle</h1>
     <hr />
+    <LifecycleParent />
 
     <h1>4. Props & Emits</h1>
     <hr />
