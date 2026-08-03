@@ -13,6 +13,7 @@ import WatchersMulti from './components/practices/composition/WatchersMulti.vue'
 import WatchersReactive from './components/practices/composition/WatchersReactive.vue'
 import WatchersWatchEffect from './components/practices/composition/WatchersWatchEffect.vue'
 import WeatherComposition from './components/practices/exercise/WeatherComposition.vue'
+import WeatherParent from './components/practices/exercise/WeatherParent.vue'
 
 // 1. Reactive State
 // 2. Computed & Watchers
@@ -34,7 +35,7 @@ import WeatherComposition from './components/practices/exercise/WeatherCompositi
     <WatchersReactive />
     <WatchersWatchEffect />
 
-    <h1>2.1 Weather Composition</h1>
+    <h1>HW2: Weather Composition</h1>
     <hr />
     <WeatherComposition />
 
@@ -51,6 +52,10 @@ import WeatherComposition from './components/practices/exercise/WeatherCompositi
     <SlotDefaultParent />
     <SlotNamedParent />
     <SlotScopedParent />
+
+    <h1>HW3: Weather Component</h1>
+    <hr />
+    <WeatherParent />
   </div>
 </template>
 
