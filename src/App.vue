@@ -1,6 +1,7 @@
 <script setup>
 import LifeCycleChild from './components/practices/component/LifeCycleChild.vue'
 import LifecycleParent from './components/practices/component/LifecycleParent.vue'
+import PropsEmitsParent from './components/practices/component/PropsEmitsParent.vue'
 import ComputedBasic from './components/practices/composition/ComputedBasic.vue'
 import ReactiveReactive from './components/practices/composition/ReactiveReactive.vue'
 import ReactiveRef from './components/practices/composition/ReactiveRef.vue'
@@ -41,6 +42,7 @@ import WeatherComposition from './components/practices/exercise/WeatherCompositi
 
     <h1>4. Props & Emits</h1>
     <hr />
+    <PropsEmitsParent />
 
     <h1>5. Component Slot</h1>
     <hr />
