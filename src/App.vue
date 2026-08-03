@@ -1,62 +1,31 @@
 <script setup>
-import SampleOne from './components/practices/basic/SampleOne.vue'
-import SampleTwo from './components/practices/basic/SampleTwo.vue'
-import VueHtmlXss from './components/practices/basic/VueHtmlXss.vue'
-import VueHTML from './components/practices/basic/VueHTML.vue'
-import VueText from './components/practices/basic/VueText.vue'
-import VueBind from './components/practices/basic/VueBind.vue'
-import VueBindClass from './components/practices/basic/VueBindClass.vue'
-import VueBindStyle from './components/practices/basic/VueBindStyle.vue'
-import VueBindShorthand from './components/practices/basic/VueBindShorthand.vue'
-import VueIf from './components/practices/basic/VueIf.vue'
-import VueShow from './components/practices/basic/VueShow.vue'
-import VueFor from './components/practices/basic/VueFor.vue'
-import VueMemo from './components/practices/basic/VueMemo.vue'
-import VueOnce from './components/practices/basic/VueOnce.vue'
-import VuePre from './components/practices/basic/VuePre.vue'
-import VueCloak from './components/practices/basic/VueCloak.vue'
-import EventBasic from './components/practices/basic/EventBasic.vue'
-import EventObject from './components/practices/basic/EventObject.vue'
-import EventModifier from './components/practices/basic/EventModifier.vue'
-import ModelBasic from './components/practices/basic/ModelBasic.vue'
-import ModelForm from './components/practices/basic/ModelForm.vue'
-import ModelModifier from './components/practices/basic/ModelModifier.vue'
-import StyleScoped from './components/practices/basic/StyleScoped.vue'
-import WeatherMockup from './components/practices/exercise/WeatherMockup.vue'
+import ReactiveReactive from './components/practices/composition/ReactiveReactive.vue'
+import ReactiveRef from './components/practices/composition/ReactiveRef.vue'
+
+// 1. Reactive State
+// 2. Computed & Watchers
 </script>
 
 <template>
-  <SampleOne />
-  <SampleTwo />
+  <div class="practice-container">
+    <h1>1. Reactive State</h1>
+    <hr />
+    <ReactiveRef />
+    <ReactiveReactive />
+    <h1>2. Computed & Watchers</h1>
+    <hr />
 
-  <VueHtmlXss />
-  <VueHTML />
-  <VueText />
-  <VueBind />
-  <VueBindClass />
-  <VueBindStyle />
-  <VueBindShorthand />
-  <VueIf />
-  <VueShow />
-  <VueFor />
-  <VuePre />
-  <VueCloak />
-  <VueOnce />
-  <VueMemo />
+    <h1>3. Component Lifecycle</h1>
+    <hr />
 
-  <EventBasic />
-  <EventObject />
-  <EventModifier />
+    <h1>4. Props & Emits</h1>
+    <hr />
 
-  <ModelBasic />
-  <ModelForm />
-  <ModelModifier />
-  <StyleScoped />
-
-  <!-- <WeatherMockup /> -->
+    <h1>5. Component Slot</h1>
+    <hr />
+  </div>
 </template>
 
 <style>
 @import '@/assets/practice.css';
-/* @import '@/assets/exercise.css'; */
 </style>
