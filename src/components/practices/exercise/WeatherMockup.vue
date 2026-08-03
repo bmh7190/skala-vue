@@ -23,7 +23,7 @@ const showDetail = (cityName, status) => {
     </section>
 
     <section class="list-box">
-      <h3>🏙️ 지역별 날시 현황</h3>
+      <h3>🏙️ 지역별 날씨 현황</h3>
       <div
         v-for="item in weatherList"
         :key="item.id"
