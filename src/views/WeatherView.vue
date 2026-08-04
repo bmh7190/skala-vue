@@ -1,4 +1,5 @@
 <script setup>
+import UnitToggle from '@/components/practices/exercise/UnitToggle.vue'
 import WeatherComposition from '@/components/practices/exercise/WeatherComposition.vue'
 import WeatherMockup from '@/components/practices/exercise/WeatherMockup.vue'
 import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
@@ -29,6 +30,21 @@ import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
             <RouterLink to="/weather" class="nav-item">날씨 대시보드</RouterLink>
             <span class="divider">|</span>
             <RouterLink to="/weather/about" class="nav-item">서비스 소개</RouterLink>
+          </nav>
+
+          <RouterView />
+        </div>
+      </section>
+
+      <section class="app-container">
+        <div class="dashborad-wrapper">
+          <h2>종합실습 5: 스토어 적용</h2>
+
+          <nav class="navigation-bar" aria-label="날씨 페이지 메뉴">
+            <RouterLink to="/weather" class="nav-item">날씨 대시보드</RouterLink>
+            <span class="divider">|</span>
+            <RouterLink to="/weather/about" class="nav-item">서비스 소개</RouterLink>
+            <UnitToggle />
           </nav>
 
           <RouterView />

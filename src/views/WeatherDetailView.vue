@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { useConfigStore } from '@/stores/configStore'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 
 const mockDetails = {
   city_01: {
@@ -38,6 +40,16 @@ onMounted(() => {
     selectedCity.value = mockDetails[id]
   }
 })
+
+const displayTemp = computed(() => {
+  if (!selectedCity.value) return 0
+  const rawTemp = selectedCity.value.temp
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32)
+  }
+
+  return rawTemp
+})
 </script>
 
 <template>
@@ -45,16 +57,14 @@ onMounted(() => {
     <h2>지역별 상세 기상 관측 정보</h2>
     <div v-if="selectedCity" class="info-card">
       <h4>지정 지역: {{ selectedCity.name }}</h4>
-      <p>실시간 기온: {{ selectedCity.temp }}C</p>
+      <p>실시간 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
       <p>기상 현황: {{ selectedCity.status }}</p>
       <p>대기 습도: {{ selectedCity.humidity }}%</p>
       <p>현재 풍속: {{ selectedCity.wind }}</p>
     </div>
     <div v-else>해당 지역의 상세 정보가 존재하지 않습니다.</div>
     <br />
-    <button class="back-btn" @click="router.push('/weather')">
-      ← 날씨 대시보드로 돌아가기
-    </button>
+    <button class="back-btn" @click="router.push('/weather')">← 날씨 대시보드로 돌아가기</button>
   </div>
 </template>
 
