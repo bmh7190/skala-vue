@@ -4,10 +4,15 @@ import axios from 'axios'
 
 const weatherData = ref(null)
 const isLoading = ref(false)
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 
 const handleFetchWeather = async () => {
+  if (!API_KEY) {
+    alert('.env.local에 OpenWeather API 키를 설정하세요.')
+    return
+  }
+
   isLoading.value = true
-  const API_KEY = '2a073d6f2084ad72a6230d3b1980b9eb'
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=35.158582&lon=126.804975&appid=${API_KEY}&units=metric&lang=kr`
 
   try {
