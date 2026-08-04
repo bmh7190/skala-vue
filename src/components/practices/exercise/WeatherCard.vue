@@ -1,5 +1,8 @@
 <script setup>
+import { computed } from 'vue'
+
 import { useTemperature } from '@/composables/useTemperature'
+
 const props = defineProps({
   cityItem: {
     type: Object,
@@ -14,7 +17,8 @@ const props = defineProps({
 
 const emit = defineEmits(['select-card', 'click-detail'])
 
-const { displayTemp, displayUnit } = useTemperature(props.cityItem.temp)
+const temperature = computed(() => props.cityItem.temp)
+const { displayTemp, displayUnit } = useTemperature(temperature)
 </script>
 
 <template>

@@ -9,9 +9,14 @@ defineProps({
     type: Array,
     required: true,
   },
+
+  showResultMessage: {
+    type: Boolean,
+    default: true,
+  },
 })
 
-defineEmits(['update-query'])
+defineEmits(['update-query', 'search'])
 </script>
 
 <template>
@@ -23,13 +28,16 @@ defineEmits(['update-query'])
       :value="currentQuery"
       placeholder="검색할 도시 이름 입력"
       @input="$emit('update-query', $event.target.value)"
+      @keyup.enter="$emit('search')"
     />
 
-    <p v-if="searchResults.length !== 0">
-      검색 중인 도시:
-      <strong>{{ currentQuery }}</strong>
-    </p>
+    <template v-if="showResultMessage">
+      <p v-if="searchResults.length !== 0">
+        검색 중인 도시:
+        <strong>{{ currentQuery }}</strong>
+      </p>
 
-    <p v-else>검색 결과와 일치하는 도시가 없습니다.</p>
+      <p v-else>검색 결과와 일치하는 도시가 없습니다.</p>
+    </template>
   </div>
 </template>

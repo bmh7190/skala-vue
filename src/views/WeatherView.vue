@@ -6,6 +6,7 @@ import UnitToggle from '@/components/practices/exercise/UnitToggle.vue'
 import WeatherComposition from '@/components/practices/exercise/WeatherComposition.vue'
 import WeatherMockup from '@/components/practices/exercise/WeatherMockup.vue'
 import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
+import WeatherHomeApiView from './WeatherHomeApiView.vue'
 
 const route = useRoute()
 const selectedTask = ref(route.path === '/weather' ? 1 : 4)
@@ -66,7 +67,10 @@ const selectedTask = ref(route.path === '/weather' ? 1 : 4)
             <UnitToggle />
           </nav>
 
-          <RouterView />
+          <KeepAlive>
+            <WeatherHomeApiView v-if="route.name === 'WeatherHome'" />
+          </KeepAlive>
+          <RouterView v-if="route.name !== 'WeatherHome'" />
         </div>
       </section>
     </div>

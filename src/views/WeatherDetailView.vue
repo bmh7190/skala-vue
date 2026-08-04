@@ -1,8 +1,10 @@
 <script setup>
+import axios from 'axios'
 import { useTemperature } from '@/composables/useTemperature'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const route = useRoute()
 const router = useRouter()
 const mockDetails = {
@@ -30,12 +32,45 @@ const mockDetails = {
 }
 
 const selectedCity = ref(null)
+const errorMessage = ref('')
 
 // 마운트할 때 리퀘스트 파람을 통해서 얻은 도시 ID를 mockDetail에서 찾은 후 selectedCity에 넣기
-onMounted(() => {
+onMounted(async () => {
   const id = route.params.cityId
+
   if (mockDetails[id]) {
     selectedCity.value = mockDetails[id]
+    return
+  }
+
+  const { lat, lon, name, country } = route.query
+
+  if (!lat || !lon || !API_KEY) {
+    errorMessage.value = '해당 지역의 상세 정보를 불러올 수 없습니다.'
+    return
+  }
+
+  try {
+    const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+      params: {
+        lat,
+        lon,
+        units: 'metric',
+        lang: 'kr',
+        appid: API_KEY,
+      },
+    })
+    const data = response.data
+
+    selectedCity.value = {
+      name: country ? `${name}, ${country}` : name,
+      temp: Math.round(data.main.temp),
+      status: data.weather[0].description,
+      humidity: `${data.main.humidity}%`,
+      wind: `${data.wind.speed}m/s`,
+    }
+  } catch {
+    errorMessage.value = '해당 지역의 상세 정보를 불러오지 못했습니다.'
   }
 })
 
@@ -54,7 +89,7 @@ const { displayTemp, displayUnit } = useTemperature(temperature)
       <p>대기 습도: {{ selectedCity.humidity }}</p>
       <p>현재 풍속: {{ selectedCity.wind }}</p>
     </div>
-    <div v-else>해당 지역의 상세 정보가 존재하지 않습니다.</div>
+    <div v-else>{{ errorMessage || '상세 날씨 정보를 불러오는 중입니다.' }}</div>
     <br />
     <button class="back-btn" @click="router.push('/weather')">← 날씨 대시보드로 돌아가기</button>
   </div>
