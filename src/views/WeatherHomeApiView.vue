@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BaseDashboardCard from '@/components/practices/exercise/BaseDashboardCard.vue'
@@ -57,7 +57,8 @@ const defaultCities = [
   },
 ]
 
-const weatherList = ref(defaultCities.map((city) => ({ ...city })))
+const initialWeatherList = ref(defaultCities.map((city) => ({ ...city })))
+const weatherList = ref(initialWeatherList.value.map((city) => ({ ...city })))
 const cityName = ref('')
 const selectedCityId = ref(null)
 const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
@@ -102,9 +103,10 @@ const fetchDefaultWeather = async () => {
     )
     const successCount = results.filter((result) => result.status === 'fulfilled').length
 
-    weatherList.value = results.map((result, index) =>
+    initialWeatherList.value = results.map((result, index) =>
       result.status === 'fulfilled' ? result.value : { ...defaultCities[index] },
     )
+    weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
 
     if (successCount === 0) {
       errorMessage.value = '실시간 날씨를 불러오지 못해 기본 데이터를 표시합니다.'
@@ -197,6 +199,17 @@ const showDetails = (item) => {
     },
   })
 }
+
+watch(cityName, (query) => {
+  if (query.trim()) {
+    return
+  }
+
+  weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
+  selectedCityId.value = null
+  selectedCityInfo.value = '카드를 클릭하거나 검색해보세요.'
+  errorMessage.value = ''
+})
 
 onMounted(fetchDefaultWeather)
 </script>
