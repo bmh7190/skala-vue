@@ -1,61 +1,19 @@
-<script setup>
-import LifecycleParent from './components/practices/component/LifecycleParent.vue'
-import PropsEmitsParent from './components/practices/component/PropsEmitsParent.vue'
-import SlotDefaultParent from './components/practices/component/SlotDefaultParent.vue'
-import SlotNamedParent from './components/practices/component/SlotNamedParent.vue'
-import SlotScopedParent from './components/practices/component/SlotScopedParent.vue'
-import ComputedBasic from './components/practices/composition/ComputedBasic.vue'
-import ReactiveReactive from './components/practices/composition/ReactiveReactive.vue'
-import ReactiveRef from './components/practices/composition/ReactiveRef.vue'
-import WatchersBasic from './components/practices/composition/WatchersBasic.vue'
-import WatchersDeep from './components/practices/composition/WatchersDeep.vue'
-import WatchersMulti from './components/practices/composition/WatchersMulti.vue'
-import WatchersReactive from './components/practices/composition/WatchersReactive.vue'
-import WatchersWatchEffect from './components/practices/composition/WatchersWatchEffect.vue'
-import WeatherComposition from './components/practices/exercise/WeatherComposition.vue'
-import WeatherParent from './components/practices/exercise/WeatherParent.vue'
-
-// 1. Reactive State
-// 2. Computed & Watchers
-</script>
+<script setup></script>
 
 <template>
-  <div class="practice-container">
-    <h1>1. Reactive State</h1>
+  <div class="app-container">
+    <h1>과제 4: 라우터적용</h1>
     <hr />
-    <ReactiveRef />
-    <ReactiveReactive />
-
-    <h1>2. Computed & Watchers</h1>
-    <hr />
-    <ComputedBasic />
-    <WatchersBasic />
-    <WatchersMulti />
-    <WatchersDeep />
-    <WatchersReactive />
-    <WatchersWatchEffect />
-
-    <h1>HW2: Weather Composition</h1>
-    <hr />
-    <WeatherComposition />
-
-    <h1>3. Component Lifecycle</h1>
-    <hr />
-    <LifecycleParent />
-
-    <h1>4. Props & Emits</h1>
-    <hr />
-    <PropsEmitsParent />
-
-    <h1>5. Component Slot</h1>
-    <hr />
-    <SlotDefaultParent />
-    <SlotNamedParent />
-    <SlotScopedParent />
-
-    <h1>HW3: Weather Component</h1>
-    <hr />
-    <WeatherParent />
+    <div class="dashboard-wrapper">
+      <nav class="navigation-bar">
+        <RouterLink to="/" class="nav-item">날씨 대시보드</RouterLink>
+        <span class="divider">|</span>
+        <RouterLink to="/about" class="nav-item">서비스 소개</RouterLink>
+      </nav>
+      <main>
+        <RouterView />
+      </main>
+    </div>
   </div>
 </template>
 
