@@ -265,10 +265,6 @@ onMounted(fetchDefaultWeather)
 .setup-message,
 .error-message {
   margin-top: 12px;
-}
-
-.setup-message,
-.error-message {
   color: #d63031;
 }
 </style>
