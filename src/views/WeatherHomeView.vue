@@ -56,8 +56,6 @@ const handleDetailJump = (id) => {
 
 <template>
   <div class="dashboard-wrapper">
-    <h2>과제 4: 날씨 (라우터))</h2>
-
     <BaseDashboardCard>
       <SearchBar
         :current-query="searchQuery"
