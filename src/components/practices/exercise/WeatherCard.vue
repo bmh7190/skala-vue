@@ -1,6 +1,5 @@
 <script setup>
-import { useConfigStore } from '@/stores/configStore'
-import { computed } from 'vue'
+import { useTemperature } from '@/composables/useTemperature'
 const props = defineProps({
   cityItem: {
     type: Object,
@@ -13,23 +12,16 @@ const props = defineProps({
   },
 })
 
-const configStore = useConfigStore()
 const emit = defineEmits(['select-card', 'click-detail'])
 
-const displayTemp = computed(() => {
-  const rawTemp = props.cityItem.temp
-  if (configStore.unit === 'fahrenheit') {
-    return Math.round((rawTemp * 9) / 5 + 32)
-  }
-  return rawTemp
-})
+const { displayTemp, displayUnit } = useTemperature(props.cityItem.temp)
 </script>
 
 <template>
   <div class="weather-card" :class="{ selected: isSelected }" @click="emit('select-card')">
     <h4>{{ cityItem.name }} ({{ cityItem.status }})</h4>
 
-    <p>현재 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
+    <p>현재 기온: {{ displayTemp }}{{ displayUnit }}</p>
 
     <span v-if="cityItem.temp >= 25" class="badge hot"> 🔥 더움 </span>
 
