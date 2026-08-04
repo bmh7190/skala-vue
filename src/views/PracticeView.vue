@@ -1,52 +1,15 @@
-<script setup>
-import ComputedBasic from '@/components/practices/composition/ComputedBasic.vue'
-import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
-import PropsEmitsParent from '@/components/practices/component/PropsEmitsParent.vue'
-import ReactiveReactive from '@/components/practices/composition/ReactiveReactive.vue'
-import ReactiveRef from '@/components/practices/composition/ReactiveRef.vue'
-import SlotDefaultParent from '@/components/practices/component/SlotDefaultParent.vue'
-import SlotNamedParent from '@/components/practices/component/SlotNamedParent.vue'
-import SlotScopedParent from '@/components/practices/component/SlotScopedParent.vue'
-import WatchersBasic from '@/components/practices/composition/WatchersBasic.vue'
-import WatchersDeep from '@/components/practices/composition/WatchersDeep.vue'
-import WatchersMulti from '@/components/practices/composition/WatchersMulti.vue'
-import WatchersReactive from '@/components/practices/composition/WatchersReactive.vue'
-import WatchersWatchEffect from '@/components/practices/composition/WatchersWatchEffect.vue'
-</script>
-
 <template>
   <main class="practice-page">
-    <RouterLink to="/" class="back-link">← 메인으로</RouterLink>
+    <header class="practice-header">
+      <RouterLink to="/" class="back-link">← 메인으로</RouterLink>
 
-    <div class="practice-container">
-      <h1>1. Reactive State</h1>
-      <hr />
-      <ReactiveRef />
-      <ReactiveReactive />
+      <nav class="day-navigation" aria-label="Practice 일차 선택">
+        <RouterLink to="/practice/day-1" class="day-link">1일차</RouterLink>
+        <RouterLink to="/practice/day-2" class="day-link">2일차</RouterLink>
+      </nav>
+    </header>
 
-      <h1>2. Computed &amp; Watchers</h1>
-      <hr />
-      <ComputedBasic />
-      <WatchersBasic />
-      <WatchersMulti />
-      <WatchersDeep />
-      <WatchersReactive />
-      <WatchersWatchEffect />
-
-      <h1>3. Component Lifecycle</h1>
-      <hr />
-      <LifecycleParent />
-
-      <h1>4. Props &amp; Emits</h1>
-      <hr />
-      <PropsEmitsParent />
-
-      <h1>5. Component Slot</h1>
-      <hr />
-      <SlotDefaultParent />
-      <SlotNamedParent />
-      <SlotScopedParent />
-    </div>
+    <RouterView />
   </main>
 </template>
 
@@ -60,8 +23,35 @@ import WatchersWatchEffect from '@/components/practices/composition/WatchersWatc
   padding: 24px 20px 60px;
 }
 
+.practice-header {
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto 20px;
+}
+
 .back-link {
   display: inline-block;
-  margin: 0 0 8px 10px;
+  margin-bottom: 12px;
+}
+
+.day-navigation {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.day-link {
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.day-link.router-link-active {
+  background: #e7f8ef;
+  color: #2c8a5f;
 }
 </style>

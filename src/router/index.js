@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import PracticeDay1View from '@/views/PracticeDay1View.vue'
+import PracticeDay2View from '@/views/PracticeDay2View.vue'
 import PracticeView from '@/views/PracticeView.vue'
 import WeatherAboutView from '@/views/WeatherAboutView.vue'
 import WeatherDetailView from '@/views/WeatherDetailView.vue'
@@ -18,8 +20,20 @@ const router = createRouter({
     },
     {
       path: '/practice',
-      name: 'Practice',
       component: PracticeView,
+      redirect: '/practice/day-1',
+      children: [
+        {
+          path: 'day-1',
+          name: 'PracticeDay1',
+          component: PracticeDay1View,
+        },
+        {
+          path: 'day-2',
+          name: 'PracticeDay2',
+          component: PracticeDay2View,
+        },
+      ],
     },
     {
       path: '/weather',
