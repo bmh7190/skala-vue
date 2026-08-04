@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const handleGoHome = () => {
-  router.push('/')
+  router.push('/weather')
 }
 </script>
 
@@ -25,7 +25,7 @@ const handleGoHome = () => {
       </ul>
     </div>
 
-    <button @click="handleGoHome" class="home-btn">대시보드 홈으로 이동</button>
+    <button class="home-btn" @click="handleGoHome">날씨 대시보드로 이동</button>
   </div>
 </template>
 

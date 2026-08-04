@@ -3,8 +3,8 @@ import { computed, ref, watch, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BaseDashboardCard from '@/components/practices/exercise/BaseDashboardCard.vue'
-import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
 import SearchBar from '@/components/practices/exercise/SearchBar.vue'
+import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
 
 const router = useRouter()
 
@@ -21,12 +21,7 @@ const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
 
 const filteredWeatherList = computed(() => {
   const query = searchQuery.value.trim()
-
-  if (!query) {
-    return weatherList.value
-  }
-
-  return weatherList.value.filter((item) => item.name.includes(query))
+  return query ? weatherList.value.filter((item) => item.name.includes(query)) : weatherList.value
 })
 
 const selectCity = (item) => {

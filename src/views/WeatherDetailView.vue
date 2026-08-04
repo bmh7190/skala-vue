@@ -52,7 +52,9 @@ onMounted(() => {
     </div>
     <div v-else>해당 지역의 상세 정보가 존재하지 않습니다.</div>
     <br />
-    <button @click="router.push('/')" class="back-btn">← 메인 대시보드로 돌아가기</button>
+    <button class="back-btn" @click="router.push('/weather')">
+      ← 날씨 대시보드로 돌아가기
+    </button>
   </div>
 </template>
 
