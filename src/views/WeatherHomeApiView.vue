@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BaseDashboardCard from '@/components/practices/exercise/BaseDashboardCard.vue'
+import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import SearchBar from '@/components/practices/exercise/SearchBar.vue'
 import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
 
@@ -57,8 +58,8 @@ const defaultCities = [
   },
 ]
 
-const initialWeatherList = ref(defaultCities.map((city) => ({ ...city })))
-const weatherList = ref(initialWeatherList.value.map((city) => ({ ...city })))
+const initialWeatherList = ref([])
+const weatherList = ref([])
 const cityName = ref('')
 const selectedCityId = ref(null)
 const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
@@ -90,6 +91,8 @@ const fetchWeatherByCoordinates = async (city) => {
 
 const fetchDefaultWeather = async () => {
   if (!API_KEY) {
+    initialWeatherList.value = defaultCities.map((city) => ({ ...city }))
+    weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
     errorMessage.value = '.env.local에 OpenWeather API 키를 설정하세요.'
     return
   }
@@ -109,6 +112,8 @@ const fetchDefaultWeather = async () => {
     weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
 
     if (successCount === 0) {
+      initialWeatherList.value = defaultCities.map((city) => ({ ...city }))
+      weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
       errorMessage.value = '실시간 날씨를 불러오지 못해 기본 데이터를 표시합니다.'
     }
   } finally {
@@ -236,14 +241,18 @@ onMounted(fetchDefaultWeather)
     <BaseDashboardCard>
       <h3>🏙️ 지역별 날씨 현황</h3>
 
-      <WeatherCard
-        v-for="item in weatherList"
-        :key="item.id"
-        :city-item="item"
-        :is-selected="selectedCityId === item.id"
-        @select-card="selectCity(item)"
-        @click-detail="showDetails(item)"
-      />
+      <LoadingIndicator v-if="isLoading" message="실시간 날씨 정보를 불러오는 중입니다." />
+
+      <template v-else>
+        <WeatherCard
+          v-for="item in weatherList"
+          :key="item.id"
+          :city-item="item"
+          :is-selected="selectedCityId === item.id"
+          @select-card="selectCity(item)"
+          @click-detail="showDetails(item)"
+        />
+      </template>
     </BaseDashboardCard>
 
     <div class="status-bar">
@@ -256,6 +265,10 @@ onMounted(fetchDefaultWeather)
 .setup-message,
 .error-message {
   margin-top: 12px;
+}
+
+.setup-message,
+.error-message {
   color: #d63031;
 }
 </style>

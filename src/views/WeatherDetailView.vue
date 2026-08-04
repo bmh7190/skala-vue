@@ -1,5 +1,6 @@
 <script setup>
 import axios from 'axios'
+import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import { useTemperature } from '@/composables/useTemperature'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -89,7 +90,8 @@ const { displayTemp, displayUnit } = useTemperature(temperature)
       <p>대기 습도: {{ selectedCity.humidity }}</p>
       <p>현재 풍속: {{ selectedCity.wind }}</p>
     </div>
-    <div v-else>{{ errorMessage || '상세 날씨 정보를 불러오는 중입니다.' }}</div>
+    <p v-else-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <LoadingIndicator v-else message="상세 날씨 정보를 불러오는 중입니다." />
     <br />
     <button class="back-btn" @click="router.push('/weather')">← 날씨 대시보드로 돌아가기</button>
   </div>
@@ -108,6 +110,9 @@ const { displayTemp, displayUnit } = useTemperature(temperature)
   padding: 15px;
   border-radius: 6px;
   margin: 15px 0;
+}
+.error-message {
+  color: #d63031;
 }
 .back-btn {
   padding: 8px 12px;
