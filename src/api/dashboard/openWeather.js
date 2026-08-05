@@ -1,9 +1,39 @@
 import axios from 'axios'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
+const CURRENT_WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather'
 const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast'
 
 export const isOpenWeatherConfigured = () => Boolean(API_KEY)
+
+// 좌표 기반 현재 날씨를 대시보드에서 사용하는 형태로 변환
+export const fetchCurrentWeatherByCoordinates = async (location) => {
+  const response = await axios.get(CURRENT_WEATHER_URL, {
+    params: {
+      lat: location.lat,
+      lon: location.lon,
+      units: 'metric',
+      lang: 'kr',
+      appid: API_KEY,
+    },
+  })
+
+  const data = response.data
+
+  return {
+    ...location,
+    temp: Math.round(data.main.temp),
+    status: data.weather[0].description,
+    humidity: data.main.humidity,
+    wind: data.wind.speed,
+    feelsLike: Math.round(data.main.feels_like),
+    visibility: Math.round((data.visibility ?? 0) / 100) / 10,
+    sunrise: data.sys?.sunrise,
+    sunset: data.sys?.sunset,
+    timezone: data.timezone,
+    observedAt: data.dt,
+  }
+}
 
 // 5일·3시간 간격 예보를 그래프에서 재사용하기 쉬운 형태로 변환
 export const fetchForecastByCoordinates = async (lat, lon) => {

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import {
+  fetchCurrentWeatherByCoordinates,
   fetchForecastByCoordinates,
   isOpenWeatherConfigured,
 } from '@/api/dashboard/openWeather'
@@ -96,35 +97,6 @@ const showSearchResult = (weather, message) => {
   errorMessage.value = ''
 }
 
-// 좌표 기반 OpenWeather 조회 및 화면용 데이터 형태 변환
-const fetchWeatherByCoordinates = async (location) => {
-  const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
-    params: {
-      lat: location.lat,
-      lon: location.lon,
-      units: 'metric',
-      lang: 'kr',
-      appid: API_KEY,
-    },
-  })
-
-  const data = response.data
-
-  return {
-    ...location,
-    temp: Math.round(data.main.temp),
-    status: data.weather[0].description,
-    humidity: data.main.humidity,
-    wind: data.wind.speed,
-    feelsLike: Math.round(data.main.feels_like),
-    visibility: Math.round((data.visibility ?? 0) / 100) / 10,
-    sunrise: data.sys?.sunrise,
-    sunset: data.sys?.sunset,
-    timezone: data.timezone,
-    observedAt: data.dt,
-  }
-}
-
 // 동일 위치 캐시 우선 사용 및 미조회 위치만 API 호출
 const loadWeatherLocations = async (locations, logNewRequest = false) => {
   const results = await Promise.allSettled(
@@ -139,7 +111,7 @@ const loadWeatherLocations = async (locations, logNewRequest = false) => {
         console.log(`[Weather API] 새로 불러오기: ${location.name}`)
       }
 
-      const weather = await fetchWeatherByCoordinates(location)
+      const weather = await fetchCurrentWeatherByCoordinates(location)
       weatherStore.saveWeather(location.name, weather)
       return weather
     }),
@@ -275,7 +247,7 @@ const handleSearch = async () => {
       return
     }
 
-    const searchedWeather = await fetchWeatherByCoordinates({
+    const searchedWeather = await fetchCurrentWeatherByCoordinates({
       id: `api-${location.lat}-${location.lon}`,
       name: location.local_names?.ko ?? location.name,
       country: location.country,
@@ -371,7 +343,7 @@ const handleMapAreaSelect = async (area) => {
   errorMessage.value = ''
 
   try {
-    const weather = await fetchWeatherByCoordinates(location)
+    const weather = await fetchCurrentWeatherByCoordinates(location)
 
     weatherStore.saveWeather(cacheKey, weather)
     weatherStore.saveWeather(location.name, weather)
