@@ -12,6 +12,7 @@ import WeatherHomeApiView from '@/views/WeatherHomeApiView.vue'
 import WeatherHomeView from '@/views/WeatherHomeView.vue'
 import WeatherView from '@/views/WeatherView.vue'
 import PracticeDay3View from '@/views/PracticeDay3View.vue'
+import PracticeDay4View from '@/views/PracticeDay4View.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
           path: 'day-3',
           name: 'PraticeDay3',
           component: PracticeDay3View,
+        },
+        {
+          path: 'day-4',
+          name: 'PraticeDay4',
+          component: PracticeDay4View,
         },
       ],
     },
