@@ -89,9 +89,7 @@ let isCountryTransitioning = false
 
 const activeMap = computed(() => mapRegistry[props.selectedCountryCode] ?? mapRegistry.world)
 const mapTitle = computed(() =>
-  props.selectedCountryName
-    ? `${props.selectedCountryName} 지역 날씨 지도`
-    : '전 세계 날씨 지도',
+  props.selectedCountryName ? `${props.selectedCountryName} 지역 날씨 지도` : '전 세계 날씨 지도',
 )
 const mapDescription = computed(() =>
   props.selectedCountryCode
@@ -350,9 +348,9 @@ const addWeatherLayers = (geoJSON) => {
           40,
           '#ef4444',
         ],
-        '#17233b',
+        '#F2EDE6',
       ],
-      'fill-opacity': ['case', ['get', 'hasWeather'], 0.88, 0.72],
+      'fill-opacity': ['case', ['get', 'hasWeather'], 0.88, 0.92],
     },
   })
 
@@ -479,7 +477,7 @@ onMounted(() => {
           id: 'dashboard-background',
           type: 'background',
           paint: {
-            'background-color': '#081427',
+            'background-color': 'rgba(0, 0, 0, 0)',
           },
         },
       ],
@@ -550,20 +548,23 @@ onMounted(() => {
   resizeObserver.observe(mapContainer.value)
 })
 
-watch(() => props.selectedCountryCode, (countryCode, previousCountryCode) => {
-  if (countryCode && !previousCountryCode) {
-    transitionToCountryMap(countryCode)
-    return
-  }
+watch(
+  () => props.selectedCountryCode,
+  (countryCode, previousCountryCode) => {
+    if (countryCode && !previousCountryCode) {
+      transitionToCountryMap(countryCode)
+      return
+    }
 
-  if (countryTransitionTimer) {
-    window.clearTimeout(countryTransitionTimer)
-    countryTransitionTimer = null
-  }
+    if (countryTransitionTimer) {
+      window.clearTimeout(countryTransitionTimer)
+      countryTransitionTimer = null
+    }
 
-  isCountryTransitioning = false
-  updateMapData()
-})
+    isCountryTransitioning = false
+    updateMapData()
+  },
+)
 watch(
   () => [props.weatherList, configStore.unit],
   () => {
@@ -571,16 +572,19 @@ watch(
   },
   { deep: true },
 )
-watch(() => props.selectedCityId, () => {
-  syncSelection()
+watch(
+  () => props.selectedCityId,
+  () => {
+    syncSelection()
 
-  if (props.selectedCityId == null) {
-    focusCurrentData()
-    return
-  }
+    if (props.selectedCityId == null) {
+      focusCurrentData()
+      return
+    }
 
-  focusSelectedWeather()
-})
+    focusSelectedWeather()
+  },
+)
 
 onBeforeUnmount(() => {
   window.cancelAnimationFrame(resizeFrame)
