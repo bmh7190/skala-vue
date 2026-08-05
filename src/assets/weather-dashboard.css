@@ -399,7 +399,12 @@
 
 .task-five-container .weather-card.weather-clear {
   background-image:
-    linear-gradient(90deg, rgba(5, 20, 38, 0.76), rgba(10, 38, 65, 0.42)),
+    linear-gradient(
+      90deg,
+      rgba(5, 20, 38, 0.68) 0%,
+      rgba(10, 38, 65, 0.28) 58%,
+      rgba(10, 38, 65, 0.08) 100%
+    ),
     url('./weather-scenes/clear.jpg');
   background-position: center;
   background-size: cover;
