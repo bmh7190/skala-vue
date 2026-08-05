@@ -1,27 +1,19 @@
 <script setup>
 import axios from 'axios'
-import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import {
   fetchForecastByCoordinates,
   isOpenWeatherConfigured,
 } from '@/api/dashboard/openWeather'
-import LoadingIndicator from '@/components/dashboard/LoadingIndicator.vue'
 import SearchBar from '@/components/dashboard/SearchBar.vue'
-import WeatherDailyForecast from '@/components/dashboard/WeatherDailyForecast.vue'
+import WeatherForecastPanel from '@/components/dashboard/WeatherForecastPanel.vue'
 import WeatherLocationPanel from '@/components/dashboard/WeatherLocationPanel.vue'
 import { countryRegions, defaultCountries } from '@/data/dashboard/weatherLocations'
 import { useWeatherDashboardStore } from '@/stores/dashboard/weatherDashboardStore'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const weatherStore = useWeatherDashboardStore()
-const WeatherMapChart = defineAsyncComponent(
-  () => import('@/components/dashboard/WeatherMapChart.vue'),
-)
-const WeatherForecastChart = defineAsyncComponent(
-  () => import('@/components/dashboard/WeatherForecastChart.vue'),
-)
-
 // 역할 분리: API·화면 상태는 View, 페이지 간 재사용 결과는 Pinia에서 관리
 const worldWeatherList = ref([]) // 검색 초기화용 국가 날씨 목록
 const countryWeatherList = ref([]) // 선택 국가의 대표 지역 날씨 목록
@@ -564,68 +556,21 @@ onMounted(fetchDefaultWeather)
         @select-item="handleListSelect"
       />
 
-      <div class="map-panel" :class="{ 'region-forecast-panel': selectedWeather }">
-        <div v-if="isLoading && weatherList.length > 0" class="map-loading-overlay">
-          <LoadingIndicator message="실시간 날씨 지도를 준비하는 중입니다." />
-        </div>
-
-        <LoadingIndicator
-          v-if="selectedWeather && isForecastLoading"
-          class="region-forecast-loading"
-          message="선택한 지역의 날씨 예보를 불러오는 중입니다."
-        />
-
-        <div v-else-if="selectedWeather" class="region-forecast-layout">
-          <div class="forecast-daily-slot">
-            <p v-if="forecastErrorMessage" class="forecast-inline-error" role="alert">
-              {{ forecastErrorMessage }}
-            </p>
-            <WeatherDailyForecast
-              v-else-if="forecastList.length > 0"
-              :forecast-list="forecastList"
-            />
-          </div>
-
-          <WeatherMapChart
-            key="forecast-map"
-            :weather-list="mapWeatherList"
-            :selected-city-id="selectedCityId"
-            :selected-country-code="selectedCountryCode"
-            :selected-country-name="selectedCountry?.name"
-            @select-city="handleMapAreaSelect"
-            @select-country="handleMapCountrySelect"
-          />
-
-          <div class="forecast-chart-slot">
-            <WeatherForecastChart
-              v-if="forecastList.length > 0"
-              :forecast-list="hourlyForecastList"
-              :height="200"
-            />
-          </div>
-        </div>
-
-        <WeatherMapChart
-          v-else-if="weatherList.length > 0"
-          key="main-map"
-          :weather-list="mapWeatherList"
-          :selected-city-id="selectedCityId"
-          :selected-country-code="selectedCountryCode"
-          :selected-country-name="selectedCountry?.name"
-          @select-city="handleMapAreaSelect"
-          @select-country="handleMapCountrySelect"
-        />
-
-        <LoadingIndicator
-          v-if="weatherList.length === 0 && isLoading"
-          message="실시간 날씨 지도를 준비하는 중입니다."
-        />
-
-        <div v-else-if="weatherList.length === 0" class="empty-map-state">
-          <strong>검색 결과가 없습니다.</strong>
-          <span>검색어를 지우면 기존 지도 목록으로 돌아갑니다.</span>
-        </div>
-      </div>
+      <WeatherForecastPanel
+        :selected-weather="selectedWeather"
+        :is-loading="isLoading"
+        :is-forecast-loading="isForecastLoading"
+        :weather-list="weatherList"
+        :map-weather-list="mapWeatherList"
+        :forecast-list="forecastList"
+        :hourly-forecast-list="hourlyForecastList"
+        :forecast-error-message="forecastErrorMessage"
+        :selected-city-id="selectedCityId"
+        :selected-country-code="selectedCountryCode"
+        :selected-country-name="selectedCountry?.name"
+        @select-map-area="handleMapAreaSelect"
+        @select-map-country="handleMapCountrySelect"
+      />
     </div>
   </div>
 </template>
