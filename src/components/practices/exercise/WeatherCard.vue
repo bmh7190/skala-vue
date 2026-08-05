@@ -39,11 +39,35 @@ const emit = defineEmits(['select-card', 'click-detail'])
 
 const temperature = computed(() => props.cityItem.temp)
 const { displayTemp, displayUnit } = useTemperature(temperature)
-const weatherIcon = computed(() => {
-  const status = props.cityItem.status
+const weatherTheme = computed(() => {
+  const status = String(props.cityItem.status ?? '')
 
-  if (status.includes('비') || status.includes('소나기')) return '🌧️'
+  if (status.includes('천둥') || status.includes('번개') || status.includes('뇌우')) {
+    return 'weather-storm'
+  }
+  if (status.includes('눈') || status.includes('진눈깨비')) return 'weather-snow'
+  if (status.includes('비') || status.includes('소나기') || status.includes('이슬비')) {
+    return 'weather-rain'
+  }
+  if (
+    status.includes('안개') ||
+    status.includes('박무') ||
+    status.includes('연무') ||
+    status.includes('황사')
+  ) {
+    return 'weather-mist'
+  }
+  if (status.includes('구름') || status.includes('흐림')) return 'weather-clouds'
+  return 'weather-clear'
+})
+
+const weatherIcon = computed(() => {
+  const status = String(props.cityItem.status ?? '')
+
+  if (status.includes('천둥') || status.includes('번개') || status.includes('뇌우')) return '⛈️'
   if (status.includes('눈')) return '🌨️'
+  if (status.includes('비') || status.includes('소나기')) return '🌧️'
+  if (status.includes('안개') || status.includes('박무') || status.includes('연무')) return '🌫️'
   if (status.includes('구름')) return '🌥️'
   if (status.includes('흐림')) return '☁️'
   return '☀️'
@@ -69,9 +93,11 @@ const observedTime = computed(() => {
   <div
     v-if="dashboard"
     class="weather-card dashboard-mode"
-    :class="{ selected: isSelected, 'region-card': isRegion }"
+    :class="[weatherTheme, { selected: isSelected, 'region-card': isRegion }]"
     @click="emit('select-card')"
   >
+    <span class="weather-scene" aria-hidden="true"></span>
+
     <div class="city-weather-header">
       <div class="city-location-copy">
         <span>{{ cityItem.country }}</span>
