@@ -7,9 +7,11 @@ import BaseDashboardCard from '@/components/practices/exercise/BaseDashboardCard
 import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import SearchBar from '@/components/practices/exercise/SearchBar.vue'
 import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
+import { useWeatherStore } from '@/stores/weatherStore'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const router = useRouter()
+const weatherStore = useWeatherStore()
 
 const defaultCities = [
   {
@@ -129,14 +131,26 @@ const handleSearch = async () => {
     return
   }
 
+  if (isLoading.value) {
+    return
+  }
+
+  const cachedWeather = weatherStore.getWeather(query)
+
+  if (cachedWeather) {
+    weatherList.value = [cachedWeather]
+    selectedCityId.value = null
+    selectedCityInfo.value = '저장된 날씨 정보를 불러왔습니다.'
+    errorMessage.value = ''
+    return
+  }
+
   if (!API_KEY) {
     errorMessage.value = '.env.local에 OpenWeather API 키를 설정하세요.'
     return
   }
 
-  if (isLoading.value) {
-    return
-  }
+  console.log(`[Weather API] 새로 불러오기: ${query}`)
 
   isLoading.value = true
   errorMessage.value = ''
@@ -168,6 +182,7 @@ const handleSearch = async () => {
       lon: location.lon,
     })
 
+    weatherStore.saveWeather(query, searchedWeather)
     weatherList.value = [searchedWeather]
     selectedCityInfo.value = '검색한 도시의 실시간 날씨입니다.'
   } catch (error) {
