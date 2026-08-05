@@ -153,12 +153,6 @@
   min-height: 0;
 }
 
-.weather-dashboard-page .task-five-container .maplibre-weather-map {
-  min-height: 0;
-  flex: 1;
-  height: auto;
-}
-
 .task-five-container .dashboard-search-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(330px, 440px);
@@ -177,8 +171,7 @@
   letter-spacing: -0.04em;
 }
 
-.task-five-container .dashboard-intro p,
-.task-five-container .map-title p {
+.task-five-container .dashboard-intro p {
   color: var(--dashboard-muted);
   font-size: 13px;
 }
@@ -251,20 +244,6 @@
   background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
 }
 
-.task-five-container .map-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.task-five-container .map-title h3 {
-  margin: 2px 0 0;
-  color: var(--dashboard-text);
-  font-size: 17px;
-  font-weight: 720;
-}
-
 .task-five-container .map-panel {
   position: relative;
   min-height: 610px;
@@ -305,29 +284,6 @@
 
 .weather-dashboard-page .task-five-container .has-region-overview .locations-panel {
   overflow: hidden;
-}
-
-.task-five-container .weather-map-chart {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-}
-
-.task-five-container .map-title {
-  padding: 0 2px 12px;
-}
-
-.task-five-container .map-title p {
-  text-align: right;
-}
-
-.task-five-container .maplibre-weather-map {
-  height: 520px;
-  overflow: hidden;
-  border-radius: 14px;
-  background:
-    radial-gradient(circle at 52% 45%, rgba(14, 165, 233, 0.14), transparent 45%),
-    rgba(6, 14, 27, 0.58);
 }
 
 .task-five-container .has-region-overview .maplibre-weather-map {
@@ -396,21 +352,6 @@
   box-shadow: var(--forecast-panel-shadow);
 }
 
-.task-five-container .region-forecast-layout .map-title {
-  padding-bottom: 8px;
-}
-
-.task-five-container .region-forecast-layout .map-title p {
-  display: none;
-}
-
-.task-five-container .region-forecast-layout .maplibre-weather-map {
-  min-height: 0;
-  flex: 1;
-  height: auto;
-  background: transparent;
-}
-
 .task-five-container .forecast-chart-slot {
   grid-column: 1 / -1;
 }
@@ -432,49 +373,6 @@
   color: #fda4af;
   font-size: 12px;
   text-align: center;
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-canvas {
-  outline: none;
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-ctrl-group {
-  overflow: hidden;
-  border: 1px solid var(--dashboard-border);
-  border-radius: 9px;
-  background: rgba(226, 232, 240, 0.9);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.task-five-container .maplibre-weather-map .weather-reset-control button {
-  color: #0f172a;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-popup-content {
-  display: grid;
-  gap: 4px;
-  min-width: 170px;
-  border: 1px solid var(--dashboard-border);
-  border-radius: 10px;
-  background: rgba(8, 17, 31, 0.95);
-  color: var(--dashboard-text);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-popup-content span {
-  color: var(--dashboard-muted);
-  font-size: 11px;
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-popup-content > div {
-  display: grid;
-  gap: 4px;
-}
-
-.task-five-container .maplibre-weather-map .maplibregl-popup-tip {
-  border-top-color: rgba(8, 17, 31, 0.95);
 }
 
 .task-five-container .empty-map-state {
@@ -672,16 +570,6 @@
 
   .task-five-container .dashboard-search-row {
     gap: 20px;
-  }
-
-  .task-five-container .map-title {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .task-five-container .map-title p {
-    text-align: left;
   }
 
   .task-five-container .sun-card {

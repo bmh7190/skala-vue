@@ -83,6 +83,7 @@ defineEmits(['select-map-area', 'select-map-country'])
 
       <WeatherMapChart
         key="forecast-map"
+        compact
         :weather-list="mapWeatherList"
         :selected-city-id="selectedCityId"
         :selected-country-code="selectedCountryCode"

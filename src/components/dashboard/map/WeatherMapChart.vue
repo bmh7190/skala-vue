@@ -33,6 +33,11 @@ const props = defineProps({
     type: String,
     default: '',
   },
+
+  compact: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['select-city', 'select-country'])
@@ -603,7 +608,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="weather-map-chart">
+  <section class="weather-map-chart" :class="{ 'compact-map': compact }">
     <div class="map-title">
       <h3>{{ mapTitle }}</h3>
       <p>{{ mapDescription }}</p>
@@ -612,3 +617,113 @@ onBeforeUnmount(() => {
     <div ref="mapContainer" class="maplibre-weather-map" :aria-label="mapTitle" />
   </section>
 </template>
+
+<style scoped>
+.weather-map-chart {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.map-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 2px 12px;
+}
+
+.map-title h3 {
+  margin: 2px 0 0;
+  color: var(--dashboard-text);
+  font-size: 17px;
+  font-weight: 720;
+}
+
+.map-title p {
+  color: var(--dashboard-muted);
+  font-size: 13px;
+  text-align: right;
+}
+
+.maplibre-weather-map {
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+  flex: 1;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 52% 45%, rgba(14, 165, 233, 0.14), transparent 45%),
+    rgba(6, 14, 27, 0.58);
+}
+
+.compact-map .map-title {
+  padding-bottom: 8px;
+}
+
+.compact-map .map-title p {
+  display: none;
+}
+
+.compact-map .maplibre-weather-map {
+  min-height: 0;
+  flex: 1;
+  height: auto;
+  background: transparent;
+}
+
+.maplibre-weather-map :deep(.maplibregl-canvas) {
+  outline: none;
+}
+
+.maplibre-weather-map :deep(.maplibregl-ctrl-group) {
+  overflow: hidden;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 9px;
+  background: rgba(226, 232, 240, 0.9);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.maplibre-weather-map :deep(.weather-reset-control button) {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.maplibre-weather-map :deep(.maplibregl-popup-content) {
+  display: grid;
+  gap: 4px;
+  min-width: 170px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 10px;
+  background: rgba(8, 17, 31, 0.95);
+  color: var(--dashboard-text);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+.maplibre-weather-map :deep(.maplibregl-popup-content span) {
+  color: var(--dashboard-muted);
+  font-size: 11px;
+}
+
+.maplibre-weather-map :deep(.maplibregl-popup-content > div) {
+  display: grid;
+  gap: 4px;
+}
+
+.maplibre-weather-map :deep(.maplibregl-popup-tip) {
+  border-top-color: rgba(8, 17, 31, 0.95);
+}
+
+@media (max-width: 600px) {
+  .map-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .map-title p {
+    text-align: left;
+  }
+}
+</style>
