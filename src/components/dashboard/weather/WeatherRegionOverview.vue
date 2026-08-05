@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 
-import WeatherCurrentSummary from '@/components/dashboard/WeatherCurrentSummary.vue'
-import WeatherMetricCard from '@/components/dashboard/WeatherMetricCard.vue'
+import WeatherCurrentSummary from '@/components/dashboard/weather/WeatherCurrentSummary.vue'
+import WeatherMetricCard from '@/components/dashboard/weather/WeatherMetricCard.vue'
 import { useTemperature } from '@/composables/useTemperature'
 
 const props = defineProps({

@@ -1,14 +1,14 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
 
-import LoadingIndicator from '@/components/dashboard/LoadingIndicator.vue'
-import WeatherDailyForecast from '@/components/dashboard/WeatherDailyForecast.vue'
+import LoadingIndicator from '@/components/dashboard/common/LoadingIndicator.vue'
+import WeatherDailyForecast from '@/components/dashboard/forecast/WeatherDailyForecast.vue'
 
 const WeatherMapChart = defineAsyncComponent(
-  () => import('@/components/dashboard/WeatherMapChart.vue'),
+  () => import('@/components/dashboard/map/WeatherMapChart.vue'),
 )
 const WeatherForecastChart = defineAsyncComponent(
-  () => import('@/components/dashboard/WeatherForecastChart.vue'),
+  () => import('@/components/dashboard/forecast/WeatherForecastChart.vue'),
 )
 
 defineProps({

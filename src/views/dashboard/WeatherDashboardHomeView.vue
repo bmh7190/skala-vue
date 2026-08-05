@@ -6,9 +6,9 @@ import {
   fetchForecastByCoordinates,
   isOpenWeatherConfigured,
 } from '@/api/dashboard/openWeather'
-import SearchBar from '@/components/dashboard/SearchBar.vue'
-import WeatherForecastPanel from '@/components/dashboard/WeatherForecastPanel.vue'
-import WeatherLocationPanel from '@/components/dashboard/WeatherLocationPanel.vue'
+import SearchBar from '@/components/dashboard/common/SearchBar.vue'
+import WeatherForecastPanel from '@/components/dashboard/forecast/WeatherForecastPanel.vue'
+import WeatherLocationPanel from '@/components/dashboard/weather/WeatherLocationPanel.vue'
 import { countryRegions, defaultCountries } from '@/data/dashboard/weatherLocations'
 import { useWeatherDashboardStore } from '@/stores/dashboard/weatherDashboardStore'
 

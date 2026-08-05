@@ -1,7 +1,7 @@
 <script setup>
-import LoadingIndicator from '@/components/dashboard/LoadingIndicator.vue'
-import WeatherCard from '@/components/dashboard/WeatherCard.vue'
-import WeatherRegionOverview from '@/components/dashboard/WeatherRegionOverview.vue'
+import LoadingIndicator from '@/components/dashboard/common/LoadingIndicator.vue'
+import WeatherCard from '@/components/dashboard/weather/WeatherCard.vue'
+import WeatherRegionOverview from '@/components/dashboard/weather/WeatherRegionOverview.vue'
 
 defineProps({
   selectedWeather: {

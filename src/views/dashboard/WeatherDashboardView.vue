@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import UnitToggle from '@/components/dashboard/UnitToggle.vue'
+import UnitToggle from '@/components/dashboard/common/UnitToggle.vue'
 import '@/assets/dashboard/weather-dashboard.css'
 
 const isHeaderInitiallyVisible = ref(true)
