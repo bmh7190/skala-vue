@@ -1,10 +1,10 @@
 <script setup>
-import axios from 'axios'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import {
   fetchCurrentWeatherByCoordinates,
   fetchForecastByCoordinates,
+  fetchLocationByName,
   isOpenWeatherConfigured,
 } from '@/api/dashboard/openWeather'
 import SearchBar from '@/components/dashboard/common/SearchBar.vue'
@@ -231,14 +231,7 @@ const handleSearch = async () => {
   selectedCityInfo.value = '날씨 정보를 검색하고 있습니다.'
 
   try {
-    const locationResponse = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
-      params: {
-        q: query,
-        limit: 1,
-        appid: API_KEY,
-      },
-    })
-    const location = locationResponse.data[0]
+    const location = await fetchLocationByName(query)
 
     if (!location) {
       weatherList.value = []
@@ -247,13 +240,7 @@ const handleSearch = async () => {
       return
     }
 
-    const searchedWeather = await fetchCurrentWeatherByCoordinates({
-      id: `api-${location.lat}-${location.lon}`,
-      name: location.local_names?.ko ?? location.name,
-      country: location.country,
-      lat: location.lat,
-      lon: location.lon,
-    })
+    const searchedWeather = await fetchCurrentWeatherByCoordinates(location)
 
     weatherStore.saveWeather(query, searchedWeather)
     showSearchResult(searchedWeather, '검색한 도시의 실시간 날씨입니다.')
