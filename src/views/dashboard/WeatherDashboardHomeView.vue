@@ -9,8 +9,7 @@ import {
 import LoadingIndicator from '@/components/dashboard/LoadingIndicator.vue'
 import SearchBar from '@/components/dashboard/SearchBar.vue'
 import WeatherDailyForecast from '@/components/dashboard/WeatherDailyForecast.vue'
-import WeatherCard from '@/components/dashboard/WeatherCard.vue'
-import WeatherRegionOverview from '@/components/dashboard/WeatherRegionOverview.vue'
+import WeatherLocationPanel from '@/components/dashboard/WeatherLocationPanel.vue'
 import { countryRegions, defaultCountries } from '@/data/dashboard/weatherLocations'
 import { useWeatherDashboardStore } from '@/stores/dashboard/weatherDashboardStore'
 
@@ -551,59 +550,19 @@ onMounted(fetchDefaultWeather)
     </p>
 
     <div class="weather-dashboard-grid" :class="{ 'has-region-overview': selectedWeather }">
-      <aside class="locations-panel">
-        <button
-          v-if="selectedWeather"
-          class="world-back-button"
-          type="button"
-          @click="closeSelectedWeather"
-        >
-          ← {{ overviewBackLabel }}
-        </button>
-
-        <button
-          v-else-if="isCountryView"
-          class="world-back-button"
-          type="button"
-          @click="returnToWorld"
-        >
-          ← 세계 지도
-        </button>
-
-        <div v-if="!selectedWeather" class="locations-heading">
-          <h3>{{ locationListTitle }}</h3>
-          <span class="location-count">{{ weatherList.length }}</span>
-        </div>
-
-        <template v-if="!selectedWeather">
-          <p class="selection-message">{{ selectedCityInfo }}</p>
-
-          <LoadingIndicator v-if="isLoading" message="날씨 정보를 불러오는 중입니다." />
-
-          <div v-else-if="weatherList.length > 0" class="location-list">
-            <WeatherCard
-              v-for="item in weatherList"
-              :key="item.id"
-              dashboard
-              :city-item="item"
-              :is-region="isCountryView"
-              :is-selected="selectedCityId === item.id"
-              :show-action="false"
-              @select-card="handleListSelect(item)"
-            />
-          </div>
-
-          <div v-else class="empty-location-state">
-            <span>⌕</span>
-            <p>표시할 지역이 없습니다.</p>
-          </div>
-        </template>
-
-        <WeatherRegionOverview
-          v-else
-          :weather="selectedWeather"
-        />
-      </aside>
+      <WeatherLocationPanel
+        :selected-weather="selectedWeather"
+        :is-country-view="isCountryView"
+        :overview-back-label="overviewBackLabel"
+        :location-list-title="locationListTitle"
+        :weather-list="weatherList"
+        :selected-city-info="selectedCityInfo"
+        :is-loading="isLoading"
+        :selected-city-id="selectedCityId"
+        @close-selected-weather="closeSelectedWeather"
+        @return-to-world="returnToWorld"
+        @select-item="handleListSelect"
+      />
 
       <div class="map-panel" :class="{ 'region-forecast-panel': selectedWeather }">
         <div v-if="isLoading && weatherList.length > 0" class="map-loading-overlay">
