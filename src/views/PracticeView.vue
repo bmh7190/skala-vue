@@ -7,6 +7,7 @@
         <RouterLink to="/practice/day-1" class="day-link">1일차</RouterLink>
         <RouterLink to="/practice/day-2" class="day-link">2일차</RouterLink>
         <RouterLink to="/practice/day-3" class="day-link">3일차</RouterLink>
+        <RouterLink to="/practice/day-4" class="day-link">4일차</RouterLink>
       </nav>
     </header>
 
