@@ -167,6 +167,7 @@ const enterCountry = async (country) => {
   }
 
   selectedCityId.value = null
+  selectedCountryCode.value = country.countryCode
   isSearchResultActive.value = false
   countryWeatherList.value = []
   isLoading.value = true
@@ -176,11 +177,12 @@ const enterCountry = async (country) => {
     countryWeatherList.value = await loadWeatherLocations(regions, true)
 
     if (countryWeatherList.value.length === 0) {
+      selectedCountryCode.value = ''
+      weatherList.value = worldWeatherList.value.map((item) => ({ ...item }))
       errorMessage.value = `${country.name} 지역 날씨를 불러오지 못했습니다.`
       return
     }
 
-    selectedCountryCode.value = country.countryCode
     weatherList.value = countryWeatherList.value.map((region) => ({ ...region }))
     selectedCityInfo.value = `${country.name}의 주요 지역 날씨입니다.`
 

@@ -46,6 +46,8 @@ const SELECTED_LAYER_ID = 'weather-area-selected'
 const POINT_SOURCE_ID = 'weather-points'
 const POINT_LAYER_ID = 'weather-points-circle'
 const SELECTED_POINT_LAYER_ID = 'weather-point-selected'
+const WORLD_CENTER = [127.5, 18]
+const WORLD_TILE_SIZE = 512
 
 const createMapConfig = (topology, object, keyField, nameField, bounds = null) => ({
   geoJSON: toGeoJSON(topology, topology.objects[object]),
@@ -82,6 +84,8 @@ let popup = null
 let resizeObserver = null
 let initialBounds = null
 let resizeFrame = null
+let countryTransitionTimer = null
+let isCountryTransitioning = false
 
 const activeMap = computed(() => mapRegistry[props.selectedCountryCode] ?? mapRegistry.world)
 const mapTitle = computed(() =>
@@ -227,7 +231,62 @@ const fitCurrentMap = (animate = true) => {
   })
 }
 
+// 세계 지도 한 바퀴만 화면 너비에 맞추고 대한민국을 중앙 기준으로 배치
+const focusWorldMap = (animate = true) => {
+  if (!map) return
+
+  const containerWidth = map.getContainer().clientWidth
+  const worldZoom = Math.max(0, Math.log2(containerWidth / WORLD_TILE_SIZE) + 0.04)
+
+  map.setMinZoom(worldZoom)
+  map.easeTo({
+    center: WORLD_CENTER,
+    zoom: worldZoom,
+    duration: animate ? 650 : 0,
+  })
+}
+
+const finishCountryTransition = () => {
+  countryTransitionTimer = null
+  isCountryTransitioning = false
+  updateMapData(false)
+}
+
+// 세계 국가 경계까지 먼저 이동한 뒤 지역 경계 데이터로 자연스럽게 전환
+const transitionToCountryMap = (countryCode) => {
+  if (!map) return
+
+  const worldConfig = mapRegistry.world
+  const countryFeature = worldConfig.geoJSON.features.find(
+    (item) => item.properties[worldConfig.keyField] === countryCode,
+  )
+
+  if (!countryFeature) {
+    updateMapData()
+    return
+  }
+
+  const bounds = new LngLatBounds()
+  visitCoordinates(countryFeature.geometry.coordinates, bounds)
+  isCountryTransitioning = true
+  map.setMinZoom(0)
+
+  map.fitBounds(bounds, {
+    padding: getResponsivePadding(72),
+    maxZoom: 3.5,
+    duration: 750,
+  })
+  countryTransitionTimer = window.setTimeout(finishCountryTransition, 780)
+}
+
 const focusCurrentData = (animate = true, pointGeoJSON = createWeatherPointGeoJSON()) => {
+  if (!props.selectedCountryCode) {
+    focusWorldMap(animate)
+    return
+  }
+
+  map.setMinZoom(0)
+
   if (pointGeoJSON.features.length === 1) {
     map.flyTo({
       center: pointGeoJSON.features[0].geometry.coordinates,
@@ -390,12 +449,14 @@ const handleMapClick = (event) => {
 }
 
 const updateMapData = (animate = true) => {
-  if (!map?.isStyleLoaded()) return
+  if (!map) return
 
   const geoJSON = createWeatherGeoJSON()
   const pointGeoJSON = createWeatherPointGeoJSON()
   const source = map.getSource(SOURCE_ID)
   const pointSource = map.getSource(POINT_SOURCE_ID)
+
+  if (!source || !pointSource) return
 
   source.setData(geoJSON)
   pointSource.setData(pointGeoJSON)
@@ -423,8 +484,8 @@ onMounted(() => {
         },
       ],
     },
-    center: [0, 18],
-    zoom: 0.75,
+    center: WORLD_CENTER,
+    zoom: 1,
     attributionControl: false,
     dragRotate: false,
     pitchWithRotate: false,
@@ -476,6 +537,8 @@ onMounted(() => {
     map?.resize()
     window.cancelAnimationFrame(resizeFrame)
     resizeFrame = window.requestAnimationFrame(() => {
+      if (isCountryTransitioning) return
+
       if (props.selectedCityId == null) {
         focusCurrentData(false)
         return
@@ -487,9 +550,25 @@ onMounted(() => {
   resizeObserver.observe(mapContainer.value)
 })
 
+watch(() => props.selectedCountryCode, (countryCode, previousCountryCode) => {
+  if (countryCode && !previousCountryCode) {
+    transitionToCountryMap(countryCode)
+    return
+  }
+
+  if (countryTransitionTimer) {
+    window.clearTimeout(countryTransitionTimer)
+    countryTransitionTimer = null
+  }
+
+  isCountryTransitioning = false
+  updateMapData()
+})
 watch(
-  () => [props.weatherList, props.selectedCountryCode, configStore.unit],
-  () => updateMapData(),
+  () => [props.weatherList, configStore.unit],
+  () => {
+    if (!isCountryTransitioning) updateMapData()
+  },
   { deep: true },
 )
 watch(() => props.selectedCityId, () => {
@@ -505,6 +584,7 @@ watch(() => props.selectedCityId, () => {
 
 onBeforeUnmount(() => {
   window.cancelAnimationFrame(resizeFrame)
+  window.clearTimeout(countryTransitionTimer)
   resizeObserver?.disconnect()
   popup?.remove()
   map?.remove()
