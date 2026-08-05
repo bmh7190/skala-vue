@@ -50,3 +50,50 @@ defineEmits(['update-query', 'search'])
     </template>
   </div>
 </template>
+
+<style scoped>
+.dashboard-search h3 {
+  margin-bottom: 9px;
+  color: var(--dashboard-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.search-field {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  color: #7dd3fc;
+  font-size: 24px;
+  transform: translateY(-52%);
+  pointer-events: none;
+}
+
+.dashboard-search input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px 0 46px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 14px;
+  outline: none;
+  background: rgba(16, 28, 47, 0.86);
+  color: var(--dashboard-text);
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard-search input::placeholder {
+  color: #6f8098;
+}
+
+.dashboard-search input:focus {
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.09);
+}
+</style>
