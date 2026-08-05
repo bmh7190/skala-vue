@@ -178,7 +178,6 @@
 }
 
 .task-five-container .dashboard-intro p,
-.task-five-container .selection-message,
 .task-five-container .map-title p {
   color: var(--dashboard-muted);
   font-size: 13px;
@@ -245,7 +244,6 @@
   gap: 18px;
 }
 
-.task-five-container .locations-panel,
 .task-five-container .map-panel {
   min-width: 0;
   border: 1px solid var(--dashboard-border);
@@ -253,33 +251,6 @@
   background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
 }
 
-.task-five-container .locations-panel {
-  display: flex;
-  background: var(--dashboard-deep-panel);
-  min-height: 0;
-  flex-direction: column;
-  padding: 18px;
-  overflow: hidden;
-}
-
-.task-five-container .world-back-button {
-  margin-bottom: 14px;
-  padding: 6px 10px;
-  border: 1px solid var(--dashboard-border);
-  border-radius: 9px;
-  background: rgba(56, 189, 248, 0.08);
-  color: #7dd3fc;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.task-five-container .world-back-button:hover {
-  border-color: rgba(56, 189, 248, 0.4);
-  background: rgba(56, 189, 248, 0.14);
-}
-
-.task-five-container .locations-heading,
 .task-five-container .map-title {
   display: flex;
   align-items: center;
@@ -287,51 +258,11 @@
   gap: 16px;
 }
 
-.task-five-container .locations-heading h3,
 .task-five-container .map-title h3 {
   margin: 2px 0 0;
   color: var(--dashboard-text);
   font-size: 17px;
   font-weight: 720;
-}
-
-.task-five-container .location-count {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 10px;
-  background: rgba(56, 189, 248, 0.1);
-  color: #7dd3fc;
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.task-five-container .selection-message {
-  min-height: 21px;
-  margin: 8px 0 14px;
-}
-
-.task-five-container .location-list {
-  display: grid;
-  min-height: 0;
-  flex: 1;
-  gap: 9px;
-  padding: 2px 6px 18px 2px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-color: rgba(125, 211, 252, 0.35) transparent;
-  scrollbar-width: thin;
-}
-
-.task-five-container .location-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.task-five-container .location-list::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(125, 211, 252, 0.28);
 }
 
 .task-five-container .map-panel {
@@ -374,77 +305,6 @@
 
 .weather-dashboard-page .task-five-container .has-region-overview .locations-panel {
   overflow: hidden;
-}
-
-.weather-dashboard-page .task-five-container .has-region-overview .region-weather-overview {
-  min-height: 0;
-  flex: 1;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-}
-
-.task-five-container .region-weather-overview {
-  min-height: 0;
-  flex: 1;
-  margin-top: 12px;
-  padding: 12px 6px 6px 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scroll-padding-bottom: 24px;
-  border-top: 1px solid var(--dashboard-border);
-  scrollbar-color: rgba(125, 211, 252, 0.35) transparent;
-  scrollbar-width: thin;
-}
-
-.task-five-container .region-weather-overview::-webkit-scrollbar {
-  width: 6px;
-}
-
-.task-five-container .region-weather-overview::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.task-five-container .region-weather-overview::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(125, 211, 252, 0.28);
-}
-
-@media (min-width: 901px) {
-  .weather-dashboard-page .task-five-container .has-region-overview .region-weather-overview {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 12px 6px 18px 0;
-    overflow-y: hidden;
-    scrollbar-gutter: auto;
-  }
-
-  .weather-dashboard-page .task-five-container .has-region-overview .weather-highlight-grid {
-    grid-template-rows: repeat(2, minmax(132px, auto));
-  }
-
-}
-
-.task-five-container .weather-highlight-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.task-five-container .weather-highlight-heading {
-  margin: 12px 2px 6px;
-}
-
-.task-five-container .weather-highlight-heading h4 {
-  margin: 3px 0 0;
-  color: var(--dashboard-text);
-  font-size: 17px;
-}
-
-.task-five-container .weather-highlight-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
 }
 
 .task-five-container .weather-map-chart {
@@ -495,12 +355,6 @@
   border: 1px solid var(--dashboard-border);
   border-radius: 18px;
   background: var(--dashboard-deep-panel);
-}
-
-.task-five-container .locations-panel > .loading-indicator {
-  width: 100%;
-  min-height: 0;
-  flex: 1;
 }
 
 .task-five-container .map-panel > .loading-indicator:not(.region-forecast-loading) {
@@ -623,7 +477,6 @@
   border-top-color: rgba(8, 17, 31, 0.95);
 }
 
-.task-five-container .empty-location-state,
 .task-five-container .empty-map-state {
   display: grid;
   min-height: 240px;
@@ -631,11 +484,6 @@
   gap: 6px;
   color: var(--dashboard-muted);
   text-align: center;
-}
-
-.task-five-container .empty-location-state span {
-  color: var(--dashboard-accent);
-  font-size: 36px;
 }
 
 .task-five-container .empty-map-state {
@@ -669,23 +517,6 @@
     font-size: 30px;
   }
 
-  .weather-dashboard-page .task-five-container .has-region-overview .region-weather-overview {
-    padding: 10px 0 8px;
-  }
-
-  .task-five-container .weather-highlight-heading {
-    margin: 8px 2px 4px;
-  }
-
-  .task-five-container .weather-highlight-heading h4 {
-    font-size: 15px;
-  }
-
-  .weather-dashboard-page .task-five-container .has-region-overview .weather-highlight-grid {
-    grid-template-rows: repeat(2, minmax(100px, auto));
-    gap: 8px;
-  }
-
 }
 
 @media (min-width: 901px) and (max-height: 680px) {
@@ -700,15 +531,6 @@
 
   .task-five-container .dashboard-intro h2 {
     font-size: 26px;
-  }
-
-  .task-five-container .weather-highlight-heading {
-    margin-top: 6px;
-  }
-
-  .weather-dashboard-page .task-five-container .has-region-overview .weather-highlight-grid {
-    grid-template-rows: repeat(2, minmax(90px, auto));
-    gap: 6px;
   }
 
 }
@@ -791,12 +613,7 @@
     height: auto;
   }
 
-  .weather-dashboard-page .task-five-container .locations-panel {
-    max-height: none;
-  }
-
-  .weather-dashboard-page .task-five-container .has-region-overview .locations-panel,
-  .weather-dashboard-page .task-five-container .has-region-overview .region-weather-overview {
+  .weather-dashboard-page .task-five-container .has-region-overview .locations-panel {
     overflow: visible;
   }
 
@@ -867,17 +684,8 @@
     text-align: left;
   }
 
-  .task-five-container .weather-highlight-grid {
-    grid-template-columns: 1fr;
-  }
-
   .task-five-container .sun-card {
     grid-column: auto;
-  }
-
-  .task-five-container .weather-highlight-heading {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
 }
