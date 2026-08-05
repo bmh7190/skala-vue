@@ -56,7 +56,7 @@ const locationListTitle = computed(() => {
   return '기본 국가'
 })
 const overviewBackLabel = computed(() => {
-  if (isSearchView.value) return '검색 결과'
+  if (isSearchView.value) return '세계 지도'
   return isCountryView.value ? '지역 목록' : '국가 목록'
 })
 
@@ -289,10 +289,13 @@ const selectCity = (item) => {
 }
 
 const closeSelectedWeather = () => {
+  if (isSearchView.value) {
+    returnToWorld()
+    return
+  }
+
   selectedCityId.value = null
-  selectedCityInfo.value = isSearchView.value
-    ? '검색한 도시의 실시간 날씨입니다.'
-    : isCountryView.value
+  selectedCityInfo.value = isCountryView.value
     ? `${selectedCountry.value.name}의 주요 지역 날씨입니다.`
     : '국가를 선택해 지역 날씨를 확인해보세요.'
 }
