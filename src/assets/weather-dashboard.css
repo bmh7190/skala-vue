@@ -503,7 +503,7 @@
 }
 
 .task-five-container .weather-dashboard-grid.has-region-overview {
-  grid-template-columns: minmax(400px, 440px) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 390px) minmax(0, 1fr);
   align-items: stretch;
 }
 
