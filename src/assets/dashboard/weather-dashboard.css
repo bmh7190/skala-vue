@@ -1,96 +1,3 @@
-/* 전체 화면 날씨 대시보드 전용 스타일: 실습 화면과 선택자 격리 */
-.app-container.task-five-container {
-  --dashboard-bg: #08111f;
-  --dashboard-panel: #101c2f;
-  --dashboard-panel-soft: #14233a;
-  --dashboard-border: rgba(148, 163, 184, 0.16);
-  --dashboard-text: #f8fafc;
-  --dashboard-muted: #91a1b8;
-  --dashboard-accent: #38bdf8;
-  --dashboard-deep-panel:
-    radial-gradient(circle at 52% 45%, rgba(14, 165, 233, 0.14), transparent 45%),
-    rgba(6, 14, 27, 0.58);
-
-  width: 100%;
-  max-width: none;
-  margin: 24px 0 40px;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at 78% 15%, rgba(14, 165, 233, 0.13), transparent 34%),
-    var(--dashboard-bg);
-  box-shadow: 0 28px 70px rgba(15, 23, 42, 0.25);
-  color: var(--dashboard-text);
-}
-
-.task-five-container .task-five-dashboard {
-  width: 100%;
-  margin: 0;
-}
-
-.task-five-container .task-five-topbar {
-  display: grid;
-  grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr);
-  align-items: center;
-  gap: 24px;
-  min-height: 76px;
-  padding: 0 28px;
-  border-bottom: 1px solid var(--dashboard-border);
-  background: rgba(8, 17, 31, 0.74);
-  backdrop-filter: blur(14px);
-}
-
-.task-five-container .dashboard-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--dashboard-text);
-  font-size: 17px;
-  letter-spacing: -0.02em;
-}
-
-.task-five-container .dashboard-brand strong {
-  font-weight: 750;
-}
-
-.task-five-container .brand-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  border-radius: 11px;
-  background: linear-gradient(145deg, #0ea5e9, #2563eb);
-  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.24);
-}
-
-.task-five-container .task-five-navigation {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px;
-  border: 1px solid var(--dashboard-border);
-  border-radius: 999px;
-  background: rgba(15, 29, 49, 0.72);
-}
-
-.task-five-container .task-five-navigation .nav-item {
-  padding: 7px 14px;
-  border-radius: 999px;
-  color: var(--dashboard-muted);
-  font-size: 13px;
-  font-weight: 650;
-}
-
-.task-five-container .task-five-navigation .nav-item:hover,
-.task-five-container .task-five-navigation .router-link-exact-active {
-  border: none;
-  background: rgba(56, 189, 248, 0.12);
-  color: #7dd3fc;
-}
-
 .task-five-container .weather-api-dashboard {
   padding: 28px;
 }
@@ -220,61 +127,11 @@
 
 }
 
-/* 데스크톱 전체 화면 확보: 상단 가장자리에 마우스를 올리면 헤더 노출 */
-@media (hover: hover) and (min-width: 901px) {
-  .weather-dashboard-page .task-five-topbar {
-    position: fixed;
-    z-index: 20;
-    top: 0;
-    right: 0;
-    left: 0;
-    box-shadow: 0 16px 36px rgba(2, 8, 23, 0.28);
-    transform: translateY(calc(-100% + 9px));
-    transition:
-      transform 0.28s ease,
-      box-shadow 0.28s ease;
-  }
-
-  .weather-dashboard-page .task-five-topbar::after {
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    width: 42px;
-    height: 3px;
-    border-radius: 999px;
-    background: rgba(125, 211, 252, 0.5);
-    content: '';
-    transform: translateX(-50%);
-  }
-
-  .weather-dashboard-page .task-five-topbar:hover,
-  .weather-dashboard-page .task-five-topbar:focus-within,
-  .weather-dashboard-page .task-five-topbar.initially-visible {
-    box-shadow: 0 20px 44px rgba(2, 8, 23, 0.42);
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 900px) {
   .weather-dashboard-page.dashboard-home-page .task-five-container .weather-api-dashboard {
     display: block;
     height: auto;
     overflow: visible;
-  }
-
-  .task-five-container .task-five-topbar {
-    grid-template-columns: 1fr auto;
-    gap: 10px 16px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-
-  .task-five-container .task-five-navigation {
-    display: flex;
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-content: center;
-    overflow-x: auto;
   }
 
   .task-five-container .dashboard-search-row,
@@ -309,15 +166,6 @@
 }
 
 @media (max-width: 600px) {
-  .app-container.task-five-container {
-    border-radius: 16px;
-  }
-
-  .task-five-container .task-five-topbar {
-    gap: 12px;
-    padding: 0 16px;
-  }
-
   .task-five-container .weather-api-dashboard {
     padding: 18px;
   }
