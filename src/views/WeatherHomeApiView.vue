@@ -493,13 +493,15 @@ onMounted(fetchDefaultWeather)
           <LoadingIndicator message="실시간 날씨 지도를 준비하는 중입니다." />
         </div>
 
-        <div v-if="selectedWeather" class="region-forecast-layout">
+        <LoadingIndicator
+          v-if="selectedWeather && isForecastLoading"
+          class="region-forecast-loading"
+          message="선택한 지역의 날씨 예보를 불러오는 중입니다."
+        />
+
+        <div v-else-if="selectedWeather" class="region-forecast-layout">
           <div class="forecast-daily-slot">
-            <LoadingIndicator
-              v-if="isForecastLoading"
-              message="5일 예보를 불러오는 중입니다."
-            />
-            <p v-else-if="forecastErrorMessage" class="forecast-inline-error" role="alert">
+            <p v-if="forecastErrorMessage" class="forecast-inline-error" role="alert">
               {{ forecastErrorMessage }}
             </p>
             <WeatherDailyForecast
