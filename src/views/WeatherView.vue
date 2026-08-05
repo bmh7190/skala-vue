@@ -57,7 +57,7 @@ const selectedTask = ref(route.path === '/weather' ? 1 : 4)
       </section>
 
       <section v-else class="app-container">
-        <div class="dashborad-wrapper">
+        <div class="dashboard-wrapper">
           <h2>과제 5: 스토어 적용</h2>
 
           <nav class="navigation-bar" aria-label="날씨 페이지 메뉴">
