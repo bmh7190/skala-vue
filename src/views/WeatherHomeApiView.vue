@@ -49,6 +49,34 @@ const isSearchView = computed(() => Boolean(cityName.value.trim()))
 const selectedWeather = computed(() =>
   weatherList.value.find((item) => item.id === selectedCityId.value),
 )
+const mapWeatherList = computed(() => {
+  const cachedWeatherList = Object.values(weatherStore.weatherCache)
+  const scopedCache = selectedCountry.value
+    ? cachedWeatherList.filter(
+        (weather) =>
+          (weather.country === selectedCountry.value.country ||
+            weather.countryCode === selectedCountry.value.countryCode) &&
+          weather.mapKey &&
+          weather.mapKey !== selectedCountry.value.mapKey,
+      )
+    : cachedWeatherList.filter(
+        (weather) => weather.mapKey && !weather.mapKey.includes('-'),
+      )
+  const uniqueWeather = new Map()
+  const combinedWeatherList = [...scopedCache, ...weatherList.value]
+
+  combinedWeatherList.forEach((weather) => {
+    const hasCoordinates =
+      Number.isFinite(Number(weather.lat)) && Number.isFinite(Number(weather.lon))
+    const key = hasCoordinates
+      ? `${Number(weather.lat).toFixed(3)},${Number(weather.lon).toFixed(3)}`
+      : String(weather.id)
+
+    uniqueWeather.set(key, weather)
+  })
+
+  return [...uniqueWeather.values()]
+})
 const hourlyForecastList = computed(() => forecastList.value.slice(0, 8))
 const locationListTitle = computed(() => {
   if (isSearchView.value) return '검색 결과'
@@ -300,14 +328,17 @@ const resolveMapLocation = (area) => {
 }
 
 const addMapWeather = (weather) => {
+  const isSameWeather = (item) =>
+    item.id === weather.id || (weather.mapKey && item.mapKey === weather.mapKey)
+
   weatherList.value = [
-    ...weatherList.value.filter((item) => item.mapKey !== weather.mapKey),
+    ...weatherList.value.filter((item) => !isSameWeather(item)),
     weather,
   ]
 
   if (isCountryView.value) {
     countryWeatherList.value = [
-      ...countryWeatherList.value.filter((item) => item.mapKey !== weather.mapKey),
+      ...countryWeatherList.value.filter((item) => !isSameWeather(item)),
       weather,
     ]
   }
@@ -318,7 +349,13 @@ const addMapWeather = (weather) => {
 // 지도 영역 선택: 현재 목록, Pinia 캐시, API 순서로 날씨 조회
 const handleMapAreaSelect = async (area) => {
   if (Number.isFinite(area.temp)) {
-    selectCity(area)
+    const isCurrentWeather = weatherList.value.some((weather) => weather.id === area.id)
+
+    if (isCurrentWeather) {
+      selectCity(area)
+    } else {
+      addMapWeather(area)
+    }
     return
   }
 
@@ -592,7 +629,7 @@ onMounted(fetchDefaultWeather)
 
           <WeatherMapChart
             key="forecast-map"
-            :weather-list="weatherList"
+            :weather-list="mapWeatherList"
             :selected-city-id="selectedCityId"
             :selected-country-code="selectedCountryCode"
             :selected-country-name="selectedCountry?.name"
@@ -612,7 +649,7 @@ onMounted(fetchDefaultWeather)
         <WeatherMapChart
           v-else-if="weatherList.length > 0"
           key="main-map"
-          :weather-list="weatherList"
+          :weather-list="mapWeatherList"
           :selected-city-id="selectedCityId"
           :selected-country-code="selectedCountryCode"
           :selected-country-name="selectedCountry?.name"
