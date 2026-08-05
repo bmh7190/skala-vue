@@ -184,7 +184,7 @@ const enterCountry = async (country) => {
     }
 
     weatherList.value = countryWeatherList.value.map((region) => ({ ...region }))
-    selectedCityInfo.value = `${country.name}의 주요 지역 날씨입니다.`
+    selectedCityInfo.value = '지역을 선택해 상세 날씨와 예보를 확인해보세요.'
 
     if (weatherList.value.length < regions.length) {
       errorMessage.value = '일부 지역의 날씨를 불러오지 못했습니다.'
@@ -296,7 +296,7 @@ const closeSelectedWeather = () => {
 
   selectedCityId.value = null
   selectedCityInfo.value = isCountryView.value
-    ? `${selectedCountry.value.name}의 주요 지역 날씨입니다.`
+    ? '지역을 선택해 상세 날씨와 예보를 확인해보세요.'
     : '국가를 선택해 지역 날씨를 확인해보세요.'
 }
 
@@ -401,7 +401,7 @@ watch(cityName, (query) => {
     : worldWeatherList.value.map((country) => ({ ...country }))
   selectedCityId.value = null
   selectedCityInfo.value = isCountryView.value
-    ? `${selectedCountry.value.name}의 주요 지역 날씨입니다.`
+    ? '지역을 선택해 상세 날씨와 예보를 확인해보세요.'
     : '국가를 선택해 지역 날씨를 확인해보세요.'
   errorMessage.value = ''
 })
