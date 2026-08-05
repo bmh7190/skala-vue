@@ -78,7 +78,7 @@ const observedTime = computed(() => {
 })
 
 const visibility = computed(() => {
-  return Number.isFinite(props.weather.visibility) ? `${props.weather.visibility} km` : '정보 없음'
+  return Number.isFinite(props.weather.visibility) ? props.weather.visibility : null
 })
 
 const clampProgress = (value) => Math.min(100, Math.max(0, value))
@@ -150,7 +150,6 @@ const windAnimationDuration = computed(() => {
           <span>체감 온도</span>
         </div>
         <strong>{{ displayFeelsLike }}{{ displayUnit }}</strong>
-        <p>몸으로 느껴지는 온도</p>
         <div
           class="highlight-visual thermometer-visual"
           :style="{ '--metric-progress': `${feelsLikeProgress}%` }"
@@ -167,7 +166,6 @@ const windAnimationDuration = computed(() => {
           <span>습도</span>
         </div>
         <strong>{{ weather.humidity }}<small>%</small></strong>
-        <p>공기 중 수분량</p>
         <div class="highlight-visual humidity-visual" aria-hidden="true">
           <svg viewBox="0 0 64 64">
             <circle class="metric-ring-track" cx="32" cy="32" r="25" pathLength="100" />
@@ -192,7 +190,6 @@ const windAnimationDuration = computed(() => {
           <span>풍속</span>
         </div>
         <strong>{{ weather.wind }}<small>m/s</small></strong>
-        <p>관측된 바람의 속도</p>
         <div
           class="highlight-visual wind-visual"
           :style="{ '--wind-duration': windAnimationDuration }"
@@ -210,8 +207,8 @@ const windAnimationDuration = computed(() => {
         <div class="highlight-card-heading">
           <span>가시거리</span>
         </div>
-        <strong>{{ visibility }}</strong>
-        <p>육안으로 확인 가능한 거리</p>
+        <strong v-if="visibility !== null">{{ visibility }}<small>km</small></strong>
+        <strong v-else>정보 없음</strong>
         <div
           class="highlight-visual visibility-visual"
           :style="{ '--visibility-level': visibilityProgress / 100 }"
