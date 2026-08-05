@@ -8,9 +8,13 @@ export const useWeatherStore = defineStore('weather', () => {
     return weatherCache.value[query.trim().toLowerCase()]
   }
 
+  const getWeatherById = (cityId) => {
+    return Object.values(weatherCache.value).find((weather) => weather.id === cityId)
+  }
+
   const saveWeather = (query, weather) => {
     weatherCache.value[query.trim().toLowerCase()] = weather
   }
 
-  return { weatherCache, getWeather, saveWeather }
+  return { weatherCache, getWeather, getWeatherById, saveWeather }
 })

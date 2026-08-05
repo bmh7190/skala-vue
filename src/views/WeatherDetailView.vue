@@ -2,12 +2,14 @@
 import axios from 'axios'
 import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import { useTemperature } from '@/composables/useTemperature'
+import { useWeatherStore } from '@/stores/weatherStore'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const route = useRoute()
 const router = useRouter()
+const weatherStore = useWeatherStore()
 const mockDetails = {
   city_01: {
     name: '대한민국 서울특별시',
@@ -44,12 +46,21 @@ onMounted(async () => {
     return
   }
 
+  const cachedWeather = weatherStore.getWeatherById(id)
+
+  if (cachedWeather) {
+    selectedCity.value = cachedWeather
+    return
+  }
+
   const { lat, lon, name, country } = route.query
 
   if (!lat || !lon || !API_KEY) {
     errorMessage.value = '해당 지역의 상세 정보를 불러올 수 없습니다.'
     return
   }
+
+  console.log(`[Weather API] 상세 날씨 새로 불러오기: ${name}`)
 
   try {
     const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
@@ -76,6 +87,14 @@ onMounted(async () => {
 })
 
 const temperature = computed(() => selectedCity.value?.temp ?? 0)
+const humidity = computed(() => {
+  const value = selectedCity.value?.humidity
+  return typeof value === 'number' ? `${value}%` : value
+})
+const wind = computed(() => {
+  const value = selectedCity.value?.wind
+  return typeof value === 'number' ? `${value}m/s` : value
+})
 
 const { displayTemp, displayUnit } = useTemperature(temperature)
 </script>
@@ -87,8 +106,8 @@ const { displayTemp, displayUnit } = useTemperature(temperature)
       <h4>지정 지역: {{ selectedCity.name }}</h4>
       <p>실시간 기온: {{ displayTemp }}{{ displayUnit }}</p>
       <p>기상 현황: {{ selectedCity.status }}</p>
-      <p>대기 습도: {{ selectedCity.humidity }}</p>
-      <p>현재 풍속: {{ selectedCity.wind }}</p>
+      <p>대기 습도: {{ humidity }}</p>
+      <p>현재 풍속: {{ wind }}</p>
     </div>
     <p v-else-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     <LoadingIndicator v-else message="상세 날씨 정보를 불러오는 중입니다." />
