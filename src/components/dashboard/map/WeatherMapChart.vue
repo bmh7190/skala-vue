@@ -1,6 +1,7 @@
 <script setup>
-import { LngLatBounds, Map, NavigationControl, Popup } from 'maplibre-gl'
+import { LngLatBounds, Map, NavigationControl, Popup, setWorkerUrl } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { feature as toGeoJSON } from 'topojson-client'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import greatBritainMap from 'apexmaps-geo/gb-admin1-10m.json'
@@ -12,6 +13,8 @@ import australiaMap from 'apexmaps-geo/au-admin1-10m.json'
 import worldMap from 'apexmaps-geo/world-countries-110m.json'
 
 import { useWeatherUnitStore } from '@/stores/dashboard/weatherUnitStore'
+
+setWorkerUrl(maplibreWorkerUrl)
 
 const props = defineProps({
   weatherList: {
@@ -91,6 +94,7 @@ let initialBounds = null
 let resizeFrame = null
 let countryTransitionTimer = null
 let isCountryTransitioning = false
+let areMapLayersInitialized = false
 
 const activeMap = computed(() => mapRegistry[props.selectedCountryCode] ?? mapRegistry.world)
 const mapTitle = computed(() =>
@@ -480,6 +484,37 @@ const updateMapData = (animate = true) => {
   focusCurrentData(animate, pointGeoJSON)
 }
 
+const initializeMapLayers = () => {
+  if (!map || areMapLayersInitialized || !map.isStyleLoaded()) return
+
+  addWeatherLayers(createWeatherGeoJSON())
+  areMapLayersInitialized = true
+  updateMapData(false)
+
+  if (props.selectedCityId != null) {
+    focusSelectedWeather(false)
+  }
+
+  map.on('mouseenter', FILL_LAYER_ID, () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+  map.on('mouseleave', FILL_LAYER_ID, () => {
+    map.getCanvas().style.cursor = ''
+    popup.remove()
+  })
+  map.on('mousemove', FILL_LAYER_ID, showPopup)
+  map.on('click', FILL_LAYER_ID, handleMapClick)
+  map.on('mouseenter', POINT_LAYER_ID, () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+  map.on('mouseleave', POINT_LAYER_ID, () => {
+    map.getCanvas().style.cursor = ''
+    popup.remove()
+  })
+  map.on('mousemove', POINT_LAYER_ID, showPopup)
+  map.on('click', POINT_LAYER_ID, handleMapClick)
+}
+
 onMounted(() => {
   map = new Map({
     container: mapContainer.value,
@@ -514,35 +549,10 @@ onMounted(() => {
   map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
   map.addControl(new ResetViewControl(), 'top-right')
 
-  map.on('load', () => {
-    const geoJSON = createWeatherGeoJSON()
+  map.once('load', initializeMapLayers)
 
-    addWeatherLayers(geoJSON)
-    updateMapData(false)
-
-    if (props.selectedCityId != null) {
-      focusSelectedWeather(false)
-    }
-
-    map.on('mouseenter', FILL_LAYER_ID, () => {
-      map.getCanvas().style.cursor = 'pointer'
-    })
-    map.on('mouseleave', FILL_LAYER_ID, () => {
-      map.getCanvas().style.cursor = ''
-      popup.remove()
-    })
-    map.on('mousemove', FILL_LAYER_ID, showPopup)
-    map.on('click', FILL_LAYER_ID, handleMapClick)
-    map.on('mouseenter', POINT_LAYER_ID, () => {
-      map.getCanvas().style.cursor = 'pointer'
-    })
-    map.on('mouseleave', POINT_LAYER_ID, () => {
-      map.getCanvas().style.cursor = ''
-      popup.remove()
-    })
-    map.on('mousemove', POINT_LAYER_ID, showPopup)
-    map.on('click', POINT_LAYER_ID, handleMapClick)
-  })
+  // 인라인 스타일이 매우 빠르게 로드돼 load 구독보다 먼저 완료된 경우도 처리
+  initializeMapLayers()
 
   // 패널 레이아웃 전환 후 변경된 지도 크기를 기준으로 선택 영역 재맞춤
   resizeObserver = new ResizeObserver(() => {
@@ -606,6 +616,7 @@ onBeforeUnmount(() => {
   resizeObserver?.disconnect()
   popup?.remove()
   map?.remove()
+  areMapLayersInitialized = false
 })
 </script>
 
