@@ -9,7 +9,7 @@ import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
 import WeatherHomeApiView from './WeatherHomeApiView.vue'
 
 const route = useRoute()
-const selectedTask = ref(route.path === '/weather' ? 1 : 4)
+const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather' ? 1 : 4)
 </script>
 
 <template>

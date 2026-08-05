@@ -163,6 +163,7 @@ const showDetails = (item) => {
     name: 'WeatherDetail',
     params: { cityId: item.id },
     query: {
+      task: '5',
       lat: item.lat,
       lon: item.lon,
       name: item.name,
