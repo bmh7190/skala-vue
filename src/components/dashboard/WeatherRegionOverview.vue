@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import WeatherCurrentSummary from '@/components/dashboard/WeatherCurrentSummary.vue'
+import WeatherMetricCard from '@/components/dashboard/WeatherMetricCard.vue'
 import { useTemperature } from '@/composables/useTemperature'
 
 const props = defineProps({
@@ -55,86 +56,36 @@ const windAnimationDuration = computed(() => {
     </div>
 
     <div class="weather-highlight-grid">
-      <article class="highlight-card">
-        <div class="highlight-card-heading">
-          <span>체감 온도</span>
-        </div>
-        <strong>{{ displayFeelsLike }}{{ displayUnit }}</strong>
-        <div
-          class="highlight-visual thermometer-visual"
-          :style="{ '--metric-progress': `${feelsLikeProgress}%` }"
-          aria-hidden="true"
-        >
-          <span class="thermometer-scale"></span>
-          <span class="thermometer-tube"><i></i></span>
-          <span class="thermometer-bulb"></span>
-        </div>
-      </article>
-
-      <article class="highlight-card">
-        <div class="highlight-card-heading">
-          <span>습도</span>
-        </div>
-        <strong>{{ weather.humidity }}<small>%</small></strong>
-        <div class="highlight-visual humidity-visual" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <circle class="metric-ring-track" cx="32" cy="32" r="25" pathLength="100" />
-            <circle
-              class="metric-ring-progress"
-              cx="32"
-              cy="32"
-              r="25"
-              pathLength="100"
-              :stroke-dasharray="`${humidityProgress} 100`"
-            />
-            <path
-              class="humidity-drop"
-              d="M32 19C26 27 23 31 23 37a9 9 0 0 0 18 0c0-6-3-10-9-18Z"
-            />
-          </svg>
-        </div>
-      </article>
-
-      <article class="highlight-card">
-        <div class="highlight-card-heading">
-          <span>풍속</span>
-        </div>
-        <strong>{{ weather.wind }}<small>m/s</small></strong>
-        <div
-          class="highlight-visual wind-visual"
-          :style="{ '--wind-duration': windAnimationDuration }"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 72 64">
-            <path class="wind-line wind-line-top" d="M8 20h31c9 0 9-11 1-11-5 0-7 3-7 6" />
-            <path class="wind-line wind-line-middle" d="M5 32h49c12 0 12 15 1 15-6 0-9-4-9-8" />
-            <path class="wind-line wind-line-bottom" d="M13 44h22" />
-          </svg>
-        </div>
-      </article>
-
-      <article class="highlight-card">
-        <div class="highlight-card-heading">
-          <span>가시거리</span>
-        </div>
-        <strong v-if="visibility !== null">{{ visibility }}<small>km</small></strong>
-        <strong v-else>정보 없음</strong>
-        <div
-          class="highlight-visual visibility-visual"
-          :style="{ '--visibility-level': visibilityProgress / 100 }"
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 72 64">
-            <path
-              class="visibility-eye"
-              d="M7 32c8-12 18-18 29-18s21 6 29 18c-8 12-18 18-29 18S15 44 7 32Z"
-            />
-            <circle class="visibility-iris" cx="36" cy="32" r="9" />
-            <circle class="visibility-pupil" cx="36" cy="32" r="3" />
-            <path class="visibility-haze" d="M9 49h23M40 49h23" />
-          </svg>
-        </div>
-      </article>
+      <WeatherMetricCard
+        title="체감 온도"
+        :value="displayFeelsLike"
+        :unit="displayUnit"
+        :small-unit="false"
+        variant="temperature"
+        :progress="feelsLikeProgress"
+      />
+      <WeatherMetricCard
+        title="습도"
+        :value="weather.humidity"
+        unit="%"
+        variant="humidity"
+        :progress="humidityProgress"
+      />
+      <WeatherMetricCard
+        title="풍속"
+        :value="weather.wind"
+        unit="m/s"
+        variant="wind"
+        :progress="windProgress"
+        :animation-duration="windAnimationDuration"
+      />
+      <WeatherMetricCard
+        title="가시거리"
+        :value="visibility"
+        unit="km"
+        variant="visibility"
+        :progress="visibilityProgress"
+      />
     </div>
   </section>
 </template>
