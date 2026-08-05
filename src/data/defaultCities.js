@@ -1,3 +1,5 @@
+// 기본 도시의 API 요청용 위치 정보
+// 온도·습도·풍속은 하드코딩 대신 실시간 API 응답값 적용
 export const defaultCities = [
   {
     id: 'api_city_01',

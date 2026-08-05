@@ -37,7 +37,8 @@ const mockDetails = {
 const selectedCity = ref(null)
 const errorMessage = ref('')
 
-// 마운트할 때 리퀘스트 파람을 통해서 얻은 도시 ID를 mockDetail에서 찾은 후 selectedCity에 넣기
+// 조회 우선순위: 과제 4 목업 → 과제 5 Pinia 캐시 → 좌표 기반 API fallback
+// 새로고침·URL 직접 접근 시 비어 있는 메모리 캐시 보완
 onMounted(async () => {
   const id = route.params.cityId
 
@@ -87,6 +88,7 @@ onMounted(async () => {
 })
 
 const temperature = computed(() => selectedCity.value?.temp ?? 0)
+// 목업 문자열과 API 숫자 데이터의 상세 화면 표시 단위 통일
 const humidity = computed(() => {
   const value = selectedCity.value?.humidity
   return typeof value === 'number' ? `${value}%` : value

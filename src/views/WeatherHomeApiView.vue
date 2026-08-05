@@ -14,8 +14,11 @@ const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const router = useRouter()
 const weatherStore = useWeatherStore()
 
-const initialWeatherList = ref([])
-const weatherList = ref([])
+// 역할 분리: API·화면 상태는 View, 페이지 간 재사용 결과는 Pinia에서 관리
+const initialWeatherList = ref([]) // 검색 초기화용 최초 API 조회 결과
+
+const weatherList = ref([]) // 현재 카드 영역 출력 목록
+
 const cityName = ref('')
 const selectedCityId = ref(null)
 const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
@@ -23,6 +26,7 @@ const isLoading = ref(false)
 const errorMessage = ref('')
 const isConfigured = computed(() => Boolean(API_KEY))
 
+// 좌표 기반 OpenWeather 조회 및 화면용 데이터 형태 변환
 const fetchWeatherByCoordinates = async (city) => {
   const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
     params: {
@@ -45,6 +49,7 @@ const fetchWeatherByCoordinates = async (city) => {
   }
 }
 
+// 첫 화면의 대표 도시 병렬 조회 및 실시간 목록 구성
 const fetchDefaultWeather = async () => {
   if (!API_KEY) {
     errorMessage.value = '.env.local에 OpenWeather API 키를 설정하세요.'
@@ -55,6 +60,7 @@ const fetchDefaultWeather = async () => {
   errorMessage.value = ''
 
   try {
+    // 일부 도시 요청 실패를 허용하는 개별 결과 처리
     const results = await Promise.allSettled(
       defaultCities.map((city) => fetchWeatherByCoordinates(city)),
     )
@@ -62,6 +68,8 @@ const fetchDefaultWeather = async () => {
       .filter((result) => result.status === 'fulfilled')
       .map((result) => result.value)
     weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
+
+    // 기본 도시 재검색을 위한 최초 API 결과 캐시
     initialWeatherList.value.forEach((city) => weatherStore.saveWeather(city.name, city))
 
     if (weatherList.value.length === 0) {
@@ -74,6 +82,7 @@ const fetchDefaultWeather = async () => {
   }
 }
 
+// 캐시 우선 조회 및 캐시 미존재 시에만 위치·날씨 API 호출
 const handleSearch = async () => {
   const query = cityName.value.trim()
 
@@ -109,6 +118,7 @@ const handleSearch = async () => {
   selectedCityInfo.value = '날씨 정보를 검색하고 있습니다.'
 
   try {
+    // 검색어의 좌표 변환 후 실시간 날씨 조회
     const locationResponse = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
       params: {
         q: query,
@@ -159,6 +169,7 @@ const selectCity = (item) => {
 }
 
 const showDetails = (item) => {
+  // 상세 새로고침용 API fallback 좌표 및 과제 5 탭 복원용 task 전달
   router.push({
     name: 'WeatherDetail',
     params: { cityId: item.id },
@@ -172,6 +183,7 @@ const showDetails = (item) => {
   })
 }
 
+// 검색어 초기화 시 API 재호출 없이 최초 조회 목록 복원
 watch(cityName, (query) => {
   if (query.trim()) {
     return

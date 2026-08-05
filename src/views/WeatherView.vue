@@ -9,6 +9,7 @@ import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
 import WeatherHomeApiView from './WeatherHomeApiView.vue'
 
 const route = useRoute()
+// 상세 이동 시 전달한 task 값을 활용한 과제 5 탭 복원
 const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather' ? 1 : 4)
 </script>
 
@@ -67,6 +68,7 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
             <UnitToggle />
           </nav>
 
+          <!-- 상세 화면 이동 전 검색 결과와 선택 상태 유지 -->
           <KeepAlive>
             <WeatherHomeApiView v-if="route.name === 'WeatherHome'" />
           </KeepAlive>
