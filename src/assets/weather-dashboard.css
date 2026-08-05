@@ -398,81 +398,35 @@
 }
 
 .task-five-container .weather-card.weather-clear {
-  background: linear-gradient(145deg, #23679a 0%, #174f7d 48%, #102d4c 100%);
-}
-
-.task-five-container .weather-clear .weather-scene {
-  background: linear-gradient(160deg, rgba(125, 211, 252, 0.1), transparent 58%);
-}
-
-.task-five-container .weather-clear .weather-scene::before {
-  top: 16px;
-  right: 22px;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #fde68a;
-  box-shadow:
-    0 0 0 9px rgba(253, 224, 71, 0.08),
-    0 0 36px 16px rgba(251, 191, 36, 0.2);
+  background-image:
+    linear-gradient(90deg, rgba(5, 20, 38, 0.76), rgba(10, 38, 65, 0.42)),
+    url('./weather-scenes/clear.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 .task-five-container .weather-card.weather-clouds {
-  background: linear-gradient(145deg, #38516c 0%, #263c55 50%, #14263d 100%);
-}
-
-.task-five-container .weather-clouds .weather-scene::before,
-.task-five-container .weather-clouds .weather-scene::after {
-  width: 82px;
-  height: 25px;
-  border-radius: 999px;
-  background: rgba(226, 232, 240, 0.12);
-  box-shadow:
-    22px -11px 0 -2px rgba(226, 232, 240, 0.1),
-    49px -4px 0 -8px rgba(226, 232, 240, 0.08);
-}
-
-.task-five-container .weather-clouds .weather-scene::before {
-  top: 31px;
-  right: 10px;
-}
-
-.task-five-container .weather-clouds .weather-scene::after {
-  top: 92px;
-  left: 42%;
-  opacity: 0.48;
-  transform: scale(0.72);
+  background-image:
+    linear-gradient(90deg, rgba(8, 23, 40, 0.78), rgba(26, 43, 61, 0.48)),
+    url('./weather-scenes/clouds.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 .task-five-container .weather-card.weather-rain {
-  background: linear-gradient(145deg, #19466a 0%, #163753 48%, #0b1d31 100%);
-}
-
-.task-five-container .weather-rain .weather-scene::before {
-  top: 18px;
-  right: 12px;
-  width: 105px;
-  height: 30px;
-  border-radius: 999px;
-  background: rgba(148, 163, 184, 0.15);
-  box-shadow:
-    24px -11px 0 -2px rgba(148, 163, 184, 0.13),
-    55px -3px 0 -8px rgba(203, 213, 225, 0.1);
-}
-
-.task-five-container .weather-rain .weather-scene::after {
-  inset: -35% -10% 0 15%;
-  background-image: repeating-linear-gradient(
-    112deg,
-    transparent 0 17px,
-    rgba(125, 211, 252, 0.2) 18px 19px,
-    transparent 20px 34px
-  );
-  animation: dashboard-rain 1.5s linear infinite;
+  background-image:
+    linear-gradient(90deg, rgba(4, 16, 29, 0.78), rgba(8, 26, 44, 0.48)),
+    url('./weather-scenes/rain.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 .task-five-container .weather-card.weather-snow {
-  background: linear-gradient(145deg, #52708d 0%, #36536f 50%, #1b334b 100%);
+  background-image:
+    linear-gradient(90deg, rgba(8, 29, 50, 0.8), rgba(26, 57, 83, 0.52)),
+    url('./weather-scenes/snow.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 .task-five-container .weather-snow .weather-scene::before,
@@ -497,47 +451,19 @@
 }
 
 .task-five-container .weather-card.weather-storm {
-  background: linear-gradient(145deg, #292f55 0%, #1d2945 50%, #10182d 100%);
-}
-
-.task-five-container .weather-storm .weather-scene::before {
-  top: 21px;
-  right: 43px;
-  width: 18px;
-  height: 46px;
-  background: rgba(253, 224, 71, 0.62);
-  clip-path: polygon(48% 0, 100% 0, 68% 39%, 94% 39%, 18% 100%, 38% 54%, 8% 54%);
-  filter: drop-shadow(0 0 9px rgba(250, 204, 21, 0.35));
-  animation: dashboard-lightning 4s ease-in-out infinite;
-}
-
-.task-five-container .weather-storm .weather-scene::after {
-  inset: 0;
-  background: radial-gradient(circle at 78% 22%, rgba(129, 140, 248, 0.2), transparent 28%);
+  background-image:
+    linear-gradient(90deg, rgba(5, 12, 29, 0.75), rgba(28, 26, 57, 0.4)),
+    url('./weather-scenes/storm.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 .task-five-container .weather-card.weather-mist {
-  background: linear-gradient(145deg, #4b6474 0%, #344c5d 50%, #1c3243 100%);
-}
-
-.task-five-container .weather-mist .weather-scene::before {
-  inset: 14px -18px;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0 17px,
-    rgba(226, 232, 240, 0.12) 18px 23px,
-    transparent 24px 34px
-  );
-  filter: blur(2px);
-}
-
-@keyframes dashboard-rain {
-  from {
-    transform: translate3d(0, -18px, 0);
-  }
-  to {
-    transform: translate3d(-20px, 42px, 0);
-  }
+  background-image:
+    linear-gradient(90deg, rgba(20, 40, 56, 0.82), rgba(54, 73, 86, 0.54)),
+    url('./weather-scenes/mist.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 @keyframes dashboard-snow {
@@ -549,27 +475,9 @@
   }
 }
 
-@keyframes dashboard-lightning {
-  0%,
-  86%,
-  100% {
-    opacity: 0.2;
-  }
-  88%,
-  91% {
-    opacity: 1;
-  }
-  89%,
-  93% {
-    opacity: 0.38;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .task-five-container .weather-rain .weather-scene::after,
   .task-five-container .weather-snow .weather-scene::before,
-  .task-five-container .weather-snow .weather-scene::after,
-  .task-five-container .weather-storm .weather-scene::before {
+  .task-five-container .weather-snow .weather-scene::after {
     animation: none;
   }
 }
