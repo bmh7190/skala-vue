@@ -1,18 +1,37 @@
+<script setup>
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+const activePracticePath = computed(() => route.path)
+</script>
+
 <template>
-  <main class="practice-page">
-    <header class="practice-header">
-      <RouterLink to="/" class="back-link">← 메인으로</RouterLink>
+  <el-container class="practice-page">
+    <el-header class="practice-header" height="auto">
+      <el-card shadow="never" class="practice-navigation-card">
+        <el-page-header title="메인" content="Vue 실습" @back="router.push('/')" />
 
-      <nav class="day-navigation" aria-label="Practice 일차 선택">
-        <RouterLink to="/practice/day-1" class="day-link">1일차</RouterLink>
-        <RouterLink to="/practice/day-2" class="day-link">2일차</RouterLink>
-        <RouterLink to="/practice/day-3" class="day-link">3일차</RouterLink>
-        <RouterLink to="/practice/day-4" class="day-link">4일차</RouterLink>
-      </nav>
-    </header>
+        <el-menu
+          :default-active="activePracticePath"
+          mode="horizontal"
+          router
+          :ellipsis="false"
+          aria-label="Practice 일차 선택"
+        >
+          <el-menu-item index="/practice/day-1">1일차</el-menu-item>
+          <el-menu-item index="/practice/day-2">2일차</el-menu-item>
+          <el-menu-item index="/practice/day-3">3일차</el-menu-item>
+          <el-menu-item index="/practice/day-4">4일차</el-menu-item>
+        </el-menu>
+      </el-card>
+    </el-header>
 
-    <RouterView />
-  </main>
+    <el-main class="practice-content">
+      <RouterView />
+    </el-main>
+  </el-container>
 </template>
 
 <style>
@@ -22,38 +41,53 @@
 <style scoped>
 .practice-page {
   width: 100%;
+  min-height: 100vh;
   padding: 24px 20px 60px;
+  background: #f5f7fa;
 }
 
 .practice-header {
   width: 800px;
   max-width: 100%;
+  padding: 0;
   margin: 0 auto 20px;
 }
 
-.back-link {
-  display: inline-block;
-  margin-bottom: 12px;
+.practice-navigation-card {
+  border-radius: 12px;
 }
 
-.day-navigation {
-  display: flex;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  background: #ffffff;
+.practice-navigation-card :deep(.el-card__body) {
+  padding-bottom: 0;
 }
 
-.day-link {
-  padding: 8px 16px;
-  border-radius: 6px;
-  color: #64748b;
-  font-weight: 600;
+.practice-navigation-card :deep(.el-menu) {
+  margin-top: 16px;
+  border-bottom: 0;
 }
 
-.day-link.router-link-active {
-  background: #e7f8ef;
-  color: #2c8a5f;
+.practice-navigation-card :deep(.el-menu-item) {
+  height: 48px;
+  line-height: 48px;
+  font-weight: 650;
+}
+
+.practice-content {
+  padding: 0;
+}
+
+@media (max-width: 600px) {
+  .practice-page {
+    padding: 16px 12px 40px;
+  }
+
+  .practice-navigation-card :deep(.el-card__body) {
+    padding: 16px 12px 0;
+  }
+
+  .practice-navigation-card :deep(.el-menu-item) {
+    min-width: 0;
+    padding: 0 12px;
+  }
 }
 </style>
