@@ -2,7 +2,7 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { computed } from 'vue'
 
-import { useConfigStore } from '@/stores/configStore'
+import { useWeatherUnitStore } from '@/stores/dashboard/weatherUnitStore'
 
 const props = defineProps({
   forecastList: {
@@ -15,10 +15,10 @@ const props = defineProps({
   },
 })
 
-const configStore = useConfigStore()
+const weatherUnitStore = useWeatherUnitStore()
 
 const convertTemperature = (temperature) => {
-  return configStore.unit === 'fahrenheit'
+  return weatherUnitStore.unit === 'fahrenheit'
     ? Math.round((temperature * 9) / 5 + 32)
     : temperature
 }
@@ -97,7 +97,7 @@ const chartOptions = computed(() => ({
     shared: true,
     theme: 'dark',
     y: {
-      formatter: (value) => `${value}${configStore.unitSymbol}`,
+      formatter: (value) => `${value}${weatherUnitStore.unitSymbol}`,
     },
   },
   xaxis: {
@@ -119,7 +119,7 @@ const chartOptions = computed(() => ({
   yaxis: {
     tickAmount: 4,
     labels: {
-      formatter: (value) => `${Math.round(value)}${configStore.unitSymbol}`,
+      formatter: (value) => `${Math.round(value)}${weatherUnitStore.unitSymbol}`,
       style: {
         colors: '#94a3b8',
       },

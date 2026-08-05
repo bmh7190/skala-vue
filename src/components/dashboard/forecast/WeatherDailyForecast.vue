@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-import { useConfigStore } from '@/stores/configStore'
+import { useWeatherUnitStore } from '@/stores/dashboard/weatherUnitStore'
 
 const props = defineProps({
   forecastList: {
@@ -10,10 +10,10 @@ const props = defineProps({
   },
 })
 
-const configStore = useConfigStore()
+const weatherUnitStore = useWeatherUnitStore()
 
 const convertTemperature = (temperature) => {
-  return configStore.unit === 'fahrenheit'
+  return weatherUnitStore.unit === 'fahrenheit'
     ? Math.round((temperature * 9) / 5 + 32)
     : temperature
 }
@@ -122,8 +122,8 @@ const dailyForecastList = computed(() => {
         </div>
 
         <div class="daily-temperature">
-          <strong>{{ convertTemperature(item.maxTemp) }}{{ configStore.unitSymbol }}</strong>
-          <span>{{ convertTemperature(item.minTemp) }}{{ configStore.unitSymbol }}</span>
+          <strong>{{ convertTemperature(item.maxTemp) }}{{ weatherUnitStore.unitSymbol }}</strong>
+          <span>{{ convertTemperature(item.minTemp) }}{{ weatherUnitStore.unitSymbol }}</span>
         </div>
       </article>
     </div>

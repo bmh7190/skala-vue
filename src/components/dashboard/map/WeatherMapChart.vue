@@ -11,7 +11,7 @@ import franceMap from 'apexmaps-geo/fr-admin1-10m.json'
 import australiaMap from 'apexmaps-geo/au-admin1-10m.json'
 import worldMap from 'apexmaps-geo/world-countries-110m.json'
 
-import { useConfigStore } from '@/stores/configStore'
+import { useWeatherUnitStore } from '@/stores/dashboard/weatherUnitStore'
 
 const props = defineProps({
   weatherList: {
@@ -41,7 +41,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['select-city', 'select-country'])
-const configStore = useConfigStore()
+const weatherUnitStore = useWeatherUnitStore()
 const mapContainer = ref(null)
 
 const SOURCE_ID = 'weather-areas'
@@ -103,7 +103,9 @@ const mapDescription = computed(() =>
 )
 
 const displayTemperature = (temperature) => {
-  return configStore.unit === 'fahrenheit' ? Math.round((temperature * 9) / 5 + 32) : temperature
+  return weatherUnitStore.unit === 'fahrenheit'
+    ? Math.round((temperature * 9) / 5 + 32)
+    : temperature
 }
 
 const findWeather = (mapKey) => props.weatherList.find((item) => item.mapKey === mapKey)
@@ -425,7 +427,7 @@ const showPopup = (event) => {
   const description = document.createElement('span')
 
   title.textContent = weather
-    ? `${weather.name} ${displayTemperature(weather.temp)}${configStore.unitSymbol}`
+    ? `${weather.name} ${displayTemperature(weather.temp)}${weatherUnitStore.unitSymbol}`
     : displayName
   description.textContent = weather
     ? `${weather.status} · 습도 ${weather.humidity}% · 풍속 ${weather.wind}m/s`
@@ -578,7 +580,7 @@ watch(
   },
 )
 watch(
-  () => [props.weatherList, configStore.unit],
+  () => [props.weatherList, weatherUnitStore.unit],
   () => {
     if (!isCountryTransitioning) updateMapData()
   },
