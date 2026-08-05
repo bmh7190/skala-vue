@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-import { useTemperature } from '@/composables/useTemperature'
+import { useDashboardTemperature } from '@/composables/dashboard/useDashboardTemperature'
 
 const props = defineProps({
   cityItem: {
@@ -38,7 +38,7 @@ const props = defineProps({
 const emit = defineEmits(['select-card', 'click-detail'])
 
 const temperature = computed(() => props.cityItem.temp)
-const { displayTemp, displayUnit } = useTemperature(temperature)
+const { displayTemp, displayUnit } = useDashboardTemperature(temperature)
 const weatherTheme = computed(() => {
   const status = String(props.cityItem.status ?? '')
 

@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
-import { useTemperature } from '@/composables/useTemperature'
+import { useDashboardTemperature } from '@/composables/dashboard/useDashboardTemperature'
 
 const props = defineProps({
   weather: {
@@ -11,7 +11,7 @@ const props = defineProps({
 })
 
 const temperature = computed(() => props.weather.temp)
-const { displayTemp, displayUnit } = useTemperature(temperature)
+const { displayTemp, displayUnit } = useDashboardTemperature(temperature)
 
 const weatherTheme = computed(() => {
   const status = String(props.weather.status ?? '')

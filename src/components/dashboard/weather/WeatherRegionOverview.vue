@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import WeatherCurrentSummary from '@/components/dashboard/weather/WeatherCurrentSummary.vue'
 import WeatherMetricCard from '@/components/dashboard/weather/WeatherMetricCard.vue'
-import { useTemperature } from '@/composables/useTemperature'
+import { useDashboardTemperature } from '@/composables/dashboard/useDashboardTemperature'
 
 const props = defineProps({
   weather: {
@@ -13,7 +13,7 @@ const props = defineProps({
 })
 
 const feelsLike = computed(() => props.weather.feelsLike ?? props.weather.temp)
-const { displayTemp: displayFeelsLike, displayUnit } = useTemperature(feelsLike)
+const { displayTemp: displayFeelsLike, displayUnit } = useDashboardTemperature(feelsLike)
 
 const visibility = computed(() => {
   return Number.isFinite(props.weather.visibility) ? props.weather.visibility : null
