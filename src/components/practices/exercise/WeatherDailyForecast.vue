@@ -116,14 +116,15 @@ const dailyForecastList = computed(() => {
         </div>
 
         <span class="daily-weather-icon" aria-hidden="true">{{ item.icon }}</span>
-        <p class="daily-status">{{ item.status }}</p>
+        <div class="daily-condition">
+          <p class="daily-status">{{ item.status }}</p>
+          <p class="daily-rain">강수 {{ item.precipitation }}%</p>
+        </div>
 
         <div class="daily-temperature">
           <strong>{{ convertTemperature(item.maxTemp) }}{{ configStore.unitSymbol }}</strong>
           <span>{{ convertTemperature(item.minTemp) }}{{ configStore.unitSymbol }}</span>
         </div>
-
-        <p class="daily-rain">강수확률 {{ item.precipitation }}%</p>
       </article>
     </div>
   </section>
@@ -131,10 +132,24 @@ const dailyForecastList = computed(() => {
 
 <style scoped>
 .daily-forecast-card {
-  padding: 20px;
+  height: 100%;
+  padding: 14px;
+  overflow-y: auto;
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 18px;
   background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
+  scrollbar-color: rgba(125, 211, 252, 0.32) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.daily-forecast-card::-webkit-scrollbar {
+  width: 5px;
+}
+
+.daily-forecast-card::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.28);
 }
 
 .daily-forecast-heading {
@@ -142,85 +157,81 @@ const dailyForecastList = computed(() => {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .daily-forecast-heading h3 {
   margin: 0;
   color: #f8fafc;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .daily-forecast-heading p {
   margin: 5px 0 0;
   color: #8291a8;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .daily-forecast-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 0;
 }
 
 .daily-weather-item {
+  display: grid;
+  grid-template-columns: minmax(78px, 0.9fr) 24px minmax(68px, 1fr) auto;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
-  padding: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.12);
-  border-radius: 14px;
-  background: rgba(7, 17, 31, 0.55);
-  text-align: center;
+  padding: 9px 3px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .daily-date {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 5px;
 }
 
 .daily-date strong {
   color: #f8fafc;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .daily-date span,
 .daily-status,
 .daily-rain {
   color: #8291a8;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .daily-weather-icon {
-  display: block;
-  margin: 18px 0 8px;
-  font-size: 32px;
+  font-size: 18px;
 }
 
 .daily-status {
-  min-height: 30px;
-  margin: 0 0 12px;
+  margin: 0;
 }
 
 .daily-temperature {
   display: flex;
   align-items: baseline;
-  justify-content: center;
-  gap: 7px;
+  justify-items: end;
+  gap: 5px;
 }
 
 .daily-temperature strong {
   color: #f8fafc;
-  font-size: 19px;
+  font-size: 16px;
 }
 
 .daily-temperature span {
   color: #64748b;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .daily-rain {
-  margin: 10px 0 0;
+  margin: 2px 0 0;
   color: #7dd3fc;
 }
 

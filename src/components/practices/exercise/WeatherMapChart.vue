@@ -81,6 +81,7 @@ let map = null
 let popup = null
 let resizeObserver = null
 let initialBounds = null
+let resizeFrame = null
 
 const activeMap = computed(() => mapRegistry[props.selectedCountryCode] ?? mapRegistry.world)
 const mapTitle = computed(() =>
@@ -161,6 +162,15 @@ const selectedMapKey = () => {
   return props.weatherList.find((item) => item.id === props.selectedCityId)?.mapKey ?? ''
 }
 
+const getResponsivePadding = (maximum) => {
+  if (!map) return maximum
+
+  const container = map.getContainer()
+  const shortestSide = Math.min(container.clientWidth, container.clientHeight)
+
+  return Math.min(maximum, Math.max(12, Math.floor(shortestSide * 0.12)))
+}
+
 // 왼쪽 카드 선택과 지도 테두리 강조 상태 동기화
 const syncSelection = () => {
   if (!map?.getLayer(SELECTED_LAYER_ID)) return
@@ -191,7 +201,7 @@ const focusSelectedWeather = (animate = true) => {
       const bounds = new LngLatBounds()
       visitCoordinates(selectedFeature.geometry.coordinates, bounds)
       map.fitBounds(bounds, {
-        padding: 84,
+        padding: getResponsivePadding(84),
         maxZoom: 7,
         duration: animate ? 650 : 0,
       })
@@ -212,7 +222,7 @@ const fitCurrentMap = (animate = true) => {
   if (!map || !initialBounds || initialBounds.isEmpty()) return
 
   map.fitBounds(initialBounds, {
-    padding: props.selectedCountryCode ? 58 : 34,
+    padding: getResponsivePadding(props.selectedCountryCode ? 58 : 34),
     duration: animate ? 650 : 0,
   })
 }
@@ -437,6 +447,10 @@ onMounted(() => {
     addWeatherLayers(geoJSON)
     updateMapData(false)
 
+    if (props.selectedCityId != null) {
+      focusSelectedWeather(false)
+    }
+
     map.on('mouseenter', FILL_LAYER_ID, () => {
       map.getCanvas().style.cursor = 'pointer'
     })
@@ -457,7 +471,19 @@ onMounted(() => {
     map.on('click', POINT_LAYER_ID, handleMapClick)
   })
 
-  resizeObserver = new ResizeObserver(() => map?.resize())
+  // 패널 레이아웃 전환 후 변경된 지도 크기를 기준으로 선택 영역 재맞춤
+  resizeObserver = new ResizeObserver(() => {
+    map?.resize()
+    window.cancelAnimationFrame(resizeFrame)
+    resizeFrame = window.requestAnimationFrame(() => {
+      if (props.selectedCityId == null) {
+        focusCurrentData(false)
+        return
+      }
+
+      focusSelectedWeather(false)
+    })
+  })
   resizeObserver.observe(mapContainer.value)
 })
 
@@ -478,6 +504,7 @@ watch(() => props.selectedCityId, () => {
 })
 
 onBeforeUnmount(() => {
+  window.cancelAnimationFrame(resizeFrame)
   resizeObserver?.disconnect()
   popup?.remove()
   map?.remove()

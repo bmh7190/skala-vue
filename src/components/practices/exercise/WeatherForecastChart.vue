@@ -9,6 +9,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  height: {
+    type: [Number, String],
+    default: 320,
+  },
 })
 
 const configStore = useConfigStore()
@@ -131,7 +135,12 @@ const chartOptions = computed(() => ({
       <p>3시간 간격 예보</p>
     </header>
 
-    <VueApexCharts type="area" height="320" :options="chartOptions" :series="chartSeries" />
+    <VueApexCharts
+      type="area"
+      :height="height"
+      :options="chartOptions"
+      :series="chartSeries"
+    />
   </section>
 </template>
 

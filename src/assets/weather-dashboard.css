@@ -761,29 +761,10 @@
   gap: 16px;
 }
 
-.task-five-container .overview-detail-button {
-  border: 1px solid var(--dashboard-border);
-  border-radius: 9px;
-  background: rgba(56, 189, 248, 0.08);
-  color: #7dd3fc;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.task-five-container .overview-detail-button {
-  padding: 8px 11px;
-}
-
-.task-five-container .overview-detail-button:hover {
-  border-color: rgba(56, 189, 248, 0.42);
-  background: rgba(56, 189, 248, 0.15);
-}
-
 .task-five-container .region-current-weather {
   position: relative;
-  min-height: 202px;
-  padding: 20px;
+  min-height: 164px;
+  padding: 16px;
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: 18px;
@@ -831,33 +812,33 @@
 .task-five-container .current-weather-heading h3 {
   margin: 3px 0 0;
   color: var(--dashboard-text);
-  font-size: 27px;
+  font-size: 23px;
   letter-spacing: -0.04em;
 }
 
 .task-five-container .overview-weather-icon {
   display: grid;
   z-index: 1;
-  width: 62px;
-  height: 62px;
+  width: 50px;
+  height: 50px;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 19px;
+  border-radius: 16px;
   background: rgba(7, 20, 36, 0.5);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  font-size: 36px;
+  font-size: 29px;
 }
 
 .task-five-container .current-temperature-row {
   position: relative;
   z-index: 1;
   justify-content: flex-start;
-  margin-top: 22px;
+  margin-top: 14px;
 }
 
 .task-five-container .current-temperature-row > strong {
   color: var(--dashboard-text);
-  font-size: clamp(54px, 6vw, 68px);
+  font-size: clamp(46px, 4.6vw, 54px);
   font-weight: 500;
   letter-spacing: -0.08em;
   line-height: 0.95;
@@ -876,7 +857,7 @@
 }
 
 .task-five-container .weather-highlight-heading {
-  margin: 18px 2px 10px;
+  margin: 14px 2px 8px;
 }
 
 .task-five-container .weather-highlight-heading h4 {
@@ -893,8 +874,8 @@
 
 .task-five-container .highlight-card {
   position: relative;
-  min-height: 118px;
-  padding: 14px;
+  min-height: 100px;
+  padding: 12px;
   overflow: hidden;
   border: 1px solid var(--dashboard-border);
   border-radius: 14px;
@@ -933,7 +914,7 @@
   display: block;
   margin-top: 8px;
   color: var(--dashboard-text);
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.04em;
 }
@@ -1013,6 +994,73 @@
 
 .task-five-container .has-region-overview .maplibre-weather-map {
   height: 730px;
+}
+
+.task-five-container .region-forecast-panel {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.task-five-container .region-forecast-layout {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(250px, 1fr) minmax(230px, 1fr);
+  gap: 14px;
+}
+
+.task-five-container .forecast-daily-slot,
+.task-five-container .forecast-chart-slot,
+.task-five-container .region-forecast-layout > .weather-map-chart {
+  min-width: 0;
+  min-height: 0;
+}
+
+.task-five-container .region-forecast-layout > .weather-map-chart {
+  padding: 14px;
+  overflow: hidden;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 16px;
+  background: rgba(7, 17, 31, 0.5);
+}
+
+.task-five-container .region-forecast-layout .map-title {
+  padding-bottom: 8px;
+}
+
+.task-five-container .region-forecast-layout .map-title p {
+  display: none;
+}
+
+.task-five-container .region-forecast-layout .maplibre-weather-map {
+  min-height: 0;
+  flex: 1;
+  height: auto;
+}
+
+.task-five-container .forecast-chart-slot {
+  grid-column: 1 / -1;
+}
+
+.task-five-container .forecast-chart-slot .forecast-chart-card {
+  height: 100%;
+  padding: 14px 18px;
+}
+
+.task-five-container .forecast-inline-error {
+  display: grid;
+  height: 100%;
+  margin: 0;
+  padding: 18px;
+  place-items: center;
+  border: 1px solid rgba(251, 113, 133, 0.24);
+  border-radius: 16px;
+  background: rgba(159, 18, 57, 0.12);
+  color: #fda4af;
+  font-size: 12px;
+  text-align: center;
 }
 
 .task-five-container .maplibre-weather-map .maplibregl-canvas {
@@ -1186,6 +1234,20 @@
 
   .task-five-container .has-region-overview .map-panel {
     min-height: 610px;
+  }
+
+  .weather-dashboard-page .task-five-container .region-forecast-panel {
+    height: auto;
+    min-height: 0;
+  }
+
+  .task-five-container .region-forecast-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 420px auto;
+  }
+
+  .task-five-container .forecast-chart-slot {
+    grid-column: auto;
   }
 }
 

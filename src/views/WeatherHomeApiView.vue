@@ -1,20 +1,26 @@
 <script setup>
 import axios from 'axios'
 import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 
+import {
+  fetchForecastByCoordinates,
+  isOpenWeatherConfigured,
+} from '@/api/openWeather'
 import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import SearchBar from '@/components/practices/exercise/SearchBar.vue'
+import WeatherDailyForecast from '@/components/practices/exercise/WeatherDailyForecast.vue'
 import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
 import WeatherRegionOverview from '@/components/practices/exercise/WeatherRegionOverview.vue'
 import { countryRegions, defaultCountries } from '@/data/weatherLocations'
 import { useWeatherStore } from '@/stores/weatherStore'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-const router = useRouter()
 const weatherStore = useWeatherStore()
 const WeatherMapChart = defineAsyncComponent(
   () => import('@/components/practices/exercise/WeatherMapChart.vue'),
+)
+const WeatherForecastChart = defineAsyncComponent(
+  () => import('@/components/practices/exercise/WeatherForecastChart.vue'),
 )
 
 // 역할 분리: API·화면 상태는 View, 페이지 간 재사용 결과는 Pinia에서 관리
@@ -29,6 +35,10 @@ const selectedCityInfo = ref('국가를 선택해 지역 날씨를 확인해보�
 const isLoading = ref(false)
 const errorMessage = ref('')
 const isSearchResultActive = ref(false)
+const forecastList = ref([])
+const forecastErrorMessage = ref('')
+const isForecastLoading = ref(false)
+let forecastRequestId = 0
 
 const isConfigured = computed(() => Boolean(API_KEY))
 const selectedCountry = computed(() =>
@@ -39,6 +49,7 @@ const isSearchView = computed(() => Boolean(cityName.value.trim()))
 const selectedWeather = computed(() =>
   weatherList.value.find((item) => item.id === selectedCityId.value),
 )
+const hourlyForecastList = computed(() => forecastList.value.slice(0, 8))
 const locationListTitle = computed(() => {
   if (isSearchView.value) return '검색 결과'
   if (selectedCountry.value) return `${selectedCountry.value.name} 주요 지역`
@@ -297,19 +308,6 @@ const handleListSelect = (item) => {
   selectCity(item)
 }
 
-const handleListAction = (item) => {
-  if (!isCountryView.value && !isSearchView.value) {
-    if (hasCountryRegions(item)) {
-      enterCountry(item)
-    } else {
-      showDetails(item)
-    }
-    return
-  }
-
-  showDetails(item)
-}
-
 const handleMapCountrySelect = (country) => {
   if (hasCountryRegions(country)) {
     enterCountry(country)
@@ -319,18 +317,62 @@ const handleMapCountrySelect = (country) => {
   selectCity(country)
 }
 
-const showDetails = (item) => {
-  router.push({
-    name: 'WeatherDashboardDetail',
-    params: { cityId: item.id },
-    query: {
-      task: '5',
-      lat: item.lat,
-      lon: item.lon,
-      name: item.name,
-      country: item.country,
-    },
-  })
+
+// 지역 선택 시에만 예보 조회, 재선택은 Pinia 캐시 우선 사용
+const loadSelectedForecast = async (weather) => {
+  const currentRequestId = ++forecastRequestId
+
+  forecastList.value = []
+  forecastErrorMessage.value = ''
+
+  if (!weather) {
+    isForecastLoading.value = false
+    return
+  }
+
+  if (
+    !Number.isFinite(Number(weather.lat)) ||
+    !Number.isFinite(Number(weather.lon)) ||
+    !isOpenWeatherConfigured()
+  ) {
+    forecastErrorMessage.value = '날씨 예보를 불러올 좌표 또는 API 키가 없습니다.'
+    return
+  }
+
+  const cachedForecast = weatherStore.getForecast(weather.lat, weather.lon)
+
+  if (cachedForecast) {
+    forecastList.value = cachedForecast
+    return
+  }
+
+  isForecastLoading.value = true
+  console.log(`[Weather API] 상세 예보 새로 불러오기: ${weather.name}`)
+
+  try {
+    const forecast = await fetchForecastByCoordinates(weather.lat, weather.lon)
+
+    if (currentRequestId !== forecastRequestId) return
+
+    weatherStore.saveForecast(weather.lat, weather.lon, forecast)
+    forecastList.value = forecast
+  } catch (error) {
+    if (currentRequestId !== forecastRequestId) return
+
+    const status = error.response?.status
+
+    if (status === 401) {
+      forecastErrorMessage.value = 'API 키가 유효하지 않거나 아직 활성화되지 않았습니다.'
+    } else if (status === 429) {
+      forecastErrorMessage.value = '예보 API 요청 한도를 초과했습니다. 잠시 후 다시 시도하세요.'
+    } else {
+      forecastErrorMessage.value = '날씨 예보를 불러오지 못했습니다.'
+    }
+  } finally {
+    if (currentRequestId === forecastRequestId) {
+      isForecastLoading.value = false
+    }
+  }
 }
 
 // 검색어 초기화 시 현재 지도 단계의 기존 목록 복원
@@ -358,6 +400,8 @@ watch(cityName, (query) => {
     : '국가를 선택해 지역 날씨를 확인해보세요.'
   errorMessage.value = ''
 })
+
+watch(selectedWeather, loadSelectedForecast)
 
 onMounted(fetchDefaultWeather)
 </script>
@@ -422,17 +466,11 @@ onMounted(fetchDefaultWeather)
               v-for="item in weatherList"
               :key="item.id"
               dashboard
-              :action-label="
-                !isCountryView && !isSearchView && hasCountryRegions(item)
-                  ? '지역 보기'
-                  : '상세보기'
-              "
               :city-item="item"
               :is-region="isCountryView"
               :is-selected="selectedCityId === item.id"
-              :show-action="isCountryView || isSearchView || !hasCountryRegions(item)"
+              :show-action="false"
               @select-card="handleListSelect(item)"
-              @click-detail="handleListAction(item)"
             />
           </div>
 
@@ -445,17 +483,51 @@ onMounted(fetchDefaultWeather)
         <WeatherRegionOverview
           v-else
           :weather="selectedWeather"
-          @show-details="showDetails(selectedWeather)"
         />
       </aside>
 
-      <div class="map-panel">
+      <div class="map-panel" :class="{ 'region-forecast-panel': selectedWeather }">
         <div v-if="isLoading && weatherList.length > 0" class="map-loading-overlay">
           <LoadingIndicator message="실시간 날씨 지도를 준비하는 중입니다." />
         </div>
 
+        <div v-if="selectedWeather" class="region-forecast-layout">
+          <div class="forecast-daily-slot">
+            <LoadingIndicator
+              v-if="isForecastLoading"
+              message="5일 예보를 불러오는 중입니다."
+            />
+            <p v-else-if="forecastErrorMessage" class="forecast-inline-error" role="alert">
+              {{ forecastErrorMessage }}
+            </p>
+            <WeatherDailyForecast
+              v-else-if="forecastList.length > 0"
+              :forecast-list="forecastList"
+            />
+          </div>
+
+          <WeatherMapChart
+            key="forecast-map"
+            :weather-list="weatherList"
+            :selected-city-id="selectedCityId"
+            :selected-country-code="selectedCountryCode"
+            :selected-country-name="selectedCountry?.name"
+            @select-city="selectCity"
+            @select-country="handleMapCountrySelect"
+          />
+
+          <div class="forecast-chart-slot">
+            <WeatherForecastChart
+              v-if="forecastList.length > 0"
+              :forecast-list="hourlyForecastList"
+              :height="200"
+            />
+          </div>
+        </div>
+
         <WeatherMapChart
-          v-if="weatherList.length > 0"
+          v-else-if="weatherList.length > 0"
+          key="main-map"
           :weather-list="weatherList"
           :selected-city-id="selectedCityId"
           :selected-country-code="selectedCountryCode"

@@ -1,20 +1,12 @@
 <script setup>
 import axios from 'axios'
-import WeatherDailyForecast from '@/components/practices/exercise/WeatherDailyForecast.vue'
 import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import { useTemperature } from '@/composables/useTemperature'
-import {
-  fetchForecastByCoordinates,
-  isOpenWeatherConfigured,
-} from '@/api/openWeather'
 import { useWeatherStore } from '@/stores/weatherStore'
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
-const WeatherForecastChart = defineAsyncComponent(
-  () => import('@/components/practices/exercise/WeatherForecastChart.vue'),
-)
 const route = useRoute()
 const router = useRouter()
 const weatherStore = useWeatherStore()
@@ -44,11 +36,6 @@ const mockDetails = {
 
 const selectedCity = ref(null)
 const errorMessage = ref('')
-const forecastList = ref([])
-const forecastErrorMessage = ref('')
-const isForecastLoading = ref(false)
-const isTaskFive = computed(() => route.query.task === '5')
-const hourlyForecastList = computed(() => forecastList.value.slice(0, 8))
 
 // 조회 우선순위: 과제 4 목업 → 과제 5 Pinia 캐시 → 좌표 기반 API fallback
 // 새로고침·URL 직접 접근 시 비어 있는 메모리 캐시 보완
@@ -100,50 +87,6 @@ onMounted(async () => {
   }
 })
 
-// 상세 화면 재방문은 예보 캐시 우선, 캐시 만료 시에만 Forecast API 호출
-const loadForecast = async () => {
-  if (!isTaskFive.value) return
-
-  const { lat, lon, name } = route.query
-
-  if (!lat || !lon || !isOpenWeatherConfigured()) {
-    forecastErrorMessage.value = '날씨 예보를 불러올 좌표 또는 API 키가 없습니다.'
-    return
-  }
-
-  const cachedForecast = weatherStore.getForecast(lat, lon)
-
-  if (cachedForecast) {
-    forecastList.value = cachedForecast
-    return
-  }
-
-  isForecastLoading.value = true
-  forecastErrorMessage.value = ''
-  console.log(`[Weather API] 상세 예보 새로 불러오기: ${name}`)
-
-  try {
-    const forecast = await fetchForecastByCoordinates(lat, lon)
-
-    weatherStore.saveForecast(lat, lon, forecast)
-    forecastList.value = forecast
-  } catch (error) {
-    const status = error.response?.status
-
-    if (status === 401) {
-      forecastErrorMessage.value = 'API 키가 유효하지 않거나 아직 활성화되지 않았습니다.'
-    } else if (status === 429) {
-      forecastErrorMessage.value = '예보 API 요청 한도를 초과했습니다. 잠시 후 다시 시도하세요.'
-    } else {
-      forecastErrorMessage.value = '날씨 예보를 불러오지 못했습니다.'
-    }
-  } finally {
-    isForecastLoading.value = false
-  }
-}
-
-onMounted(loadForecast)
-
 const temperature = computed(() => selectedCity.value?.temp ?? 0)
 // 목업 문자열과 API 숫자 데이터의 상세 화면 표시 단위 통일
 const humidity = computed(() => {
@@ -156,14 +99,10 @@ const wind = computed(() => {
 })
 
 const { displayTemp, displayUnit } = useTemperature(temperature)
-
-const returnToDashboard = () => {
-  router.push(isTaskFive.value ? { name: 'WeatherDashboard' } : '/weather')
-}
 </script>
 
 <template>
-  <div class="detail-container" :class="{ 'task-five-detail': isTaskFive }">
+  <div class="detail-container">
     <h2>지역별 상세 기상 관측 정보</h2>
     <div v-if="selectedCity" class="info-card">
       <h4>지정 지역: {{ selectedCity.name }}</h4>
@@ -175,21 +114,8 @@ const returnToDashboard = () => {
     <p v-else-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     <LoadingIndicator v-else message="상세 날씨 정보를 불러오는 중입니다." />
 
-    <section v-if="isTaskFive" class="forecast-section">
-      <LoadingIndicator
-        v-if="isForecastLoading"
-        message="날씨 예보를 불러오는 중입니다."
-      />
-      <p v-else-if="forecastErrorMessage" class="forecast-error" role="alert">
-        {{ forecastErrorMessage }}
-      </p>
-      <div v-else-if="forecastList.length > 0" class="forecast-content">
-        <WeatherForecastChart :forecast-list="hourlyForecastList" />
-        <WeatherDailyForecast :forecast-list="forecastList" />
-      </div>
-    </section>
-
-    <button class="back-btn" @click="returnToDashboard">← 날씨 대시보드로 돌아가기</button>
+    <br />
+    <button class="back-btn" @click="router.push('/weather')">← 날씨 대시보드로 돌아가기</button>
   </div>
 </template>
 
@@ -219,75 +145,4 @@ const returnToDashboard = () => {
   cursor: pointer;
 }
 
-.forecast-section {
-  margin: 20px 0;
-}
-
-.forecast-content {
-  display: grid;
-  gap: 16px;
-}
-
-.forecast-error {
-  padding: 16px;
-  border: 1px solid rgba(251, 113, 133, 0.26);
-  border-radius: 12px;
-  background: rgba(159, 18, 57, 0.14);
-  color: #fda4af;
-}
-
-.detail-container.task-five-detail {
-  padding: 26px;
-  border-radius: 0;
-  background: transparent;
-  color: #f8fafc;
-  box-shadow: none;
-}
-
-.task-five-detail > h2 {
-  margin: 0 0 18px;
-  color: #f8fafc;
-}
-
-.task-five-detail .info-card {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 16px;
-  padding: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
-}
-
-.task-five-detail .info-card h4 {
-  grid-column: 1 / -1;
-  margin: 0 0 8px;
-  color: #7dd3fc;
-}
-
-.task-five-detail .info-card p {
-  margin: 0;
-  color: #cbd5e1;
-}
-
-.task-five-detail .back-btn {
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 9px;
-  background: rgba(56, 189, 248, 0.1);
-  color: #7dd3fc;
-}
-
-@media (max-width: 600px) {
-  .detail-container.task-five-detail {
-    padding: 18px;
-  }
-
-  .task-five-detail .info-card {
-    grid-template-columns: 1fr;
-  }
-
-  .task-five-detail .info-card h4 {
-    grid-column: auto;
-  }
-}
 </style>

@@ -74,11 +74,6 @@ const router = createRouter({
           component: WeatherHomeApiView,
           meta: { keepAlive: true },
         },
-        {
-          path: ':cityId',
-          name: 'WeatherDashboardDetail',
-          component: WeatherDetailView,
-        },
       ],
     },
     {

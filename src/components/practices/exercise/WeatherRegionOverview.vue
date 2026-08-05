@@ -10,8 +10,6 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['show-details'])
-
 const temperature = computed(() => props.weather.temp)
 const feelsLike = computed(() => props.weather.feelsLike ?? props.weather.temp)
 const { displayTemp, displayUnit } = useTemperature(temperature)
@@ -85,9 +83,6 @@ const visibility = computed(() => {
 
     <div class="weather-highlight-heading">
       <h4>오늘의 하이라이트</h4>
-      <button type="button" class="overview-detail-button" @click="emit('show-details')">
-        상세 예보 보기 →
-      </button>
     </div>
 
     <div class="weather-highlight-grid">
