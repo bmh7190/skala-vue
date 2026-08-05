@@ -33,23 +33,17 @@ onBeforeUnmount(() => {
           :class="{ 'initially-visible': isHeaderInitiallyVisible }"
         >
           <div class="dashboard-leading">
-            <RouterLink
-              to="/weather"
-              class="dashboard-back-button"
-              aria-label="날씨 실습으로 돌아가기"
-            >
-              ←
-            </RouterLink>
-
-            <RouterLink to="/weather/dashboard" class="dashboard-brand">
+            <RouterLink to="/" class="dashboard-brand">
               <span class="brand-mark" aria-hidden="true">✦</span>
               <strong>Weatherly</strong>
             </RouterLink>
           </div>
 
-          <nav class="task-five-navigation" aria-label="날씨 대시보드 메뉴">
-            <RouterLink to="/weather/dashboard" class="nav-item">대시보드</RouterLink>
-            <RouterLink to="/weather/about" class="nav-item">서비스 소개</RouterLink>
+          <nav class="task-five-navigation" aria-label="Weatherly 주요 메뉴">
+            <RouterLink to="/" class="nav-item">대시보드</RouterLink>
+            <RouterLink to="/about" class="nav-item">서비스 소개</RouterLink>
+            <RouterLink to="/practice" class="nav-item">실습</RouterLink>
+            <RouterLink to="/weather" class="nav-item">과제</RouterLink>
           </nav>
 
           <UnitToggle />
@@ -83,24 +77,6 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.dashboard-back-button {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
-  place-items: center;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 11px;
-  background: rgba(20, 35, 58, 0.72);
-  color: #91a1b8;
-  text-decoration: none;
-}
-
-.dashboard-back-button:hover {
-  border-color: rgba(56, 189, 248, 0.4);
-  color: #7dd3fc;
 }
 
 .full-page-dashboard {

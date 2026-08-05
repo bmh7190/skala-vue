@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import PracticeDay1View from '@/views/PracticeDay1View.vue'
 import PracticeDay2View from '@/views/PracticeDay2View.vue'
@@ -13,14 +12,27 @@ import WeatherHomeView from '@/views/WeatherHomeView.vue'
 import WeatherView from '@/views/WeatherView.vue'
 import PracticeDay3View from '@/views/PracticeDay3View.vue'
 import PracticeDay4View from '@/views/PracticeDay4View.vue'
+import WeatherDashboardAboutView from '@/views/dashboard/WeatherDashboardAboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: HomeView,
+      component: WeatherDashboardView,
+      children: [
+        {
+          path: '',
+          name: 'WeatherDashboard',
+          component: WeatherDashboardHomeView,
+          meta: { keepAlive: true },
+        },
+        {
+          path: 'about',
+          name: 'WeatherDashboardAbout',
+          component: WeatherDashboardAboutView,
+        },
+      ],
     },
     {
       path: '/practice',
@@ -67,18 +79,6 @@ const router = createRouter({
           path: ':cityId',
           name: 'WeatherDetail',
           component: WeatherDetailView,
-        },
-      ],
-    },
-    {
-      path: '/weather/dashboard',
-      component: WeatherDashboardView,
-      children: [
-        {
-          path: '',
-          name: 'WeatherDashboard',
-          component: WeatherDashboardHomeView,
-          meta: { keepAlive: true },
         },
       ],
     },

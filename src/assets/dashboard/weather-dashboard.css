@@ -1282,10 +1282,17 @@
 
   .task-five-container .task-five-topbar {
     grid-template-columns: 1fr auto;
+    gap: 10px 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .task-five-container .task-five-navigation {
-    display: none;
+    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+    overflow-x: auto;
   }
 
   .task-five-container .dashboard-search-row,
