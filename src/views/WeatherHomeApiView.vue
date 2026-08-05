@@ -7,58 +7,12 @@ import BaseDashboardCard from '@/components/practices/exercise/BaseDashboardCard
 import LoadingIndicator from '@/components/practices/exercise/LoadingIndicator.vue'
 import SearchBar from '@/components/practices/exercise/SearchBar.vue'
 import WeatherCard from '@/components/practices/exercise/WeatherCard.vue'
+import { defaultCities } from '@/data/defaultCities'
 import { useWeatherStore } from '@/stores/weatherStore'
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const router = useRouter()
 const weatherStore = useWeatherStore()
-
-const defaultCities = [
-  {
-    id: 'api_city_01',
-    name: '서울',
-    country: 'KR',
-    temp: 28,
-    status: '맑음',
-    humidity: 55,
-    wind: 2.5,
-    lat: 37.5665,
-    lon: 126.978,
-  },
-  {
-    id: 'api_city_02',
-    name: '수원',
-    country: 'KR',
-    temp: 24,
-    status: '비',
-    humidity: 85,
-    wind: 4.1,
-    lat: 37.2636,
-    lon: 127.0286,
-  },
-  {
-    id: 'api_city_03',
-    name: '부산',
-    country: 'KR',
-    temp: 26,
-    status: '구름',
-    humidity: 65,
-    wind: 5,
-    lat: 35.1796,
-    lon: 129.0756,
-  },
-  {
-    id: 'api_city_04',
-    name: '강릉',
-    country: 'KR',
-    temp: 18,
-    status: '맑음',
-    humidity: 60,
-    wind: 2.8,
-    lat: 37.7519,
-    lon: 128.8761,
-  },
-]
 
 const initialWeatherList = ref([])
 const weatherList = ref([])
@@ -93,8 +47,6 @@ const fetchWeatherByCoordinates = async (city) => {
 
 const fetchDefaultWeather = async () => {
   if (!API_KEY) {
-    initialWeatherList.value = defaultCities.map((city) => ({ ...city }))
-    weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
     errorMessage.value = '.env.local에 OpenWeather API 키를 설정하세요.'
     return
   }
@@ -106,17 +58,16 @@ const fetchDefaultWeather = async () => {
     const results = await Promise.allSettled(
       defaultCities.map((city) => fetchWeatherByCoordinates(city)),
     )
-    const successCount = results.filter((result) => result.status === 'fulfilled').length
-
-    initialWeatherList.value = results.map((result, index) =>
-      result.status === 'fulfilled' ? result.value : { ...defaultCities[index] },
-    )
+    initialWeatherList.value = results
+      .filter((result) => result.status === 'fulfilled')
+      .map((result) => result.value)
     weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
+    initialWeatherList.value.forEach((city) => weatherStore.saveWeather(city.name, city))
 
-    if (successCount === 0) {
-      initialWeatherList.value = defaultCities.map((city) => ({ ...city }))
-      weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
-      errorMessage.value = '실시간 날씨를 불러오지 못해 기본 데이터를 표시합니다.'
+    if (weatherList.value.length === 0) {
+      errorMessage.value = '실시간 날씨를 불러오지 못했습니다.'
+    } else if (weatherList.value.length < defaultCities.length) {
+      errorMessage.value = '일부 도시의 날씨를 불러오지 못했습니다.'
     }
   } finally {
     isLoading.value = false
