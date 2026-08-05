@@ -653,7 +653,7 @@
   min-height: 0;
   flex: 1;
   margin-top: 12px;
-  padding: 12px 6px 24px 0;
+  padding: 12px 6px 6px 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-padding-bottom: 24px;
@@ -675,10 +675,39 @@
   background: rgba(125, 211, 252, 0.28);
 }
 
+@media (min-width: 901px) {
+  .weather-dashboard-page
+    .task-five-container
+    .has-region-overview
+    .region-weather-overview {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    flex-direction: column;
+    padding: 12px 0 0;
+    overflow-y: hidden;
+    scrollbar-gutter: auto;
+  }
+
+  .weather-dashboard-page
+    .task-five-container
+    .has-region-overview
+    .weather-highlight-grid {
+    flex: 1;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .weather-dashboard-page
+    .task-five-container
+    .has-region-overview
+    .highlight-card {
+    height: 100%;
+  }
+}
+
 .task-five-container .weather-highlight-heading,
 .task-five-container .current-weather-heading,
-.task-five-container .current-temperature-row,
-.task-five-container .sun-times {
+.task-five-container .current-temperature-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -687,8 +716,9 @@
 
 .task-five-container .region-current-weather {
   position: relative;
-  min-height: 164px;
-  padding: 16px;
+  box-sizing: border-box;
+  min-height: 154px;
+  padding: 12px;
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: 18px;
@@ -743,26 +773,26 @@
 .task-five-container .overview-weather-icon {
   display: grid;
   z-index: 1;
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
   background: rgba(7, 20, 36, 0.5);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  font-size: 29px;
+  font-size: 27px;
 }
 
 .task-five-container .current-temperature-row {
   position: relative;
   z-index: 1;
   justify-content: flex-start;
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 .task-five-container .current-temperature-row > strong {
   color: var(--dashboard-text);
-  font-size: clamp(46px, 4.6vw, 54px);
+  font-size: clamp(44px, 4.4vw, 50px);
   font-weight: 500;
   letter-spacing: -0.08em;
   line-height: 0.95;
@@ -780,8 +810,32 @@
   font-size: 11px;
 }
 
+.task-five-container .current-sun-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  color: var(--dashboard-muted);
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.task-five-container .current-sun-summary strong {
+  margin-left: 2px;
+  color: var(--dashboard-text);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.task-five-container .current-sun-summary i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(250, 204, 21, 0.7);
+}
+
 .task-five-container .weather-highlight-heading {
-  margin: 14px 2px 8px;
+  margin: 12px 2px 6px;
 }
 
 .task-five-container .weather-highlight-heading h4 {
@@ -798,8 +852,9 @@
 
 .task-five-container .highlight-card {
   position: relative;
-  min-height: 100px;
-  padding: 12px;
+  box-sizing: border-box;
+  min-height: 92px;
+  padding: 10px;
   overflow: hidden;
   border: 1px solid var(--dashboard-border);
   border-radius: 14px;
@@ -810,35 +865,29 @@
 .task-five-container .highlight-card-heading {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   color: var(--dashboard-muted);
-  font-size: 10px;
+  font-size: clamp(11px, 0.8vw, 13px);
   font-weight: 650;
 }
 
 .task-five-container .highlight-symbol {
   display: grid;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   place-items: center;
   border: 1px solid rgba(56, 189, 248, 0.16);
   border-radius: 8px;
   background: rgba(56, 189, 248, 0.08);
   color: #7dd3fc;
-  font-size: 14px;
-}
-
-.task-five-container .sun-symbol {
-  border-color: rgba(250, 204, 21, 0.18);
-  background: rgba(250, 204, 21, 0.08);
-  color: #fde047;
+  font-size: 15px;
 }
 
 .task-five-container .highlight-card > strong {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: var(--dashboard-text);
-  font-size: 22px;
+  font-size: clamp(24px, 1.9vw, 30px);
   font-weight: 600;
   letter-spacing: -0.04em;
 }
@@ -846,51 +895,15 @@
 .task-five-container .highlight-card small {
   margin-left: 4px;
   color: var(--dashboard-muted);
-  font-size: 11px;
+  font-size: clamp(11px, 0.8vw, 13px);
   font-weight: 500;
 }
 
 .task-five-container .highlight-card p {
-  margin: 5px 0 0;
+  margin: 3px 0 0;
   color: #718199;
-  font-size: 10px;
-}
-
-.task-five-container .sun-card {
-  grid-column: 1 / -1;
-  min-height: 112px;
-}
-
-.task-five-container .sun-times {
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.task-five-container .sun-times > div {
-  display: grid;
-  flex: 1;
-  gap: 2px;
-}
-
-.task-five-container .sun-times > div:last-child {
-  text-align: right;
-}
-
-.task-five-container .sun-times span {
-  color: #718199;
-  font-size: 9px;
-}
-
-.task-five-container .sun-times strong {
-  color: var(--dashboard-text);
-  font-size: 21px;
-  font-weight: 600;
-}
-
-.task-five-container .sun-times > i {
-  width: 1px;
-  height: 34px;
-  background: var(--dashboard-border);
+  font-size: clamp(10px, 0.75vw, 12px);
+  line-height: 1.3;
 }
 
 .task-five-container .weather-map-chart {

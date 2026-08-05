@@ -101,6 +101,11 @@ const visibility = computed(() => {
         <div>
           <p>{{ weather.status }}</p>
           <span>{{ observedTime }}</span>
+          <div class="current-sun-summary">
+            <span>일출 <strong>{{ formatLocalTime(weather.sunrise) }}</strong></span>
+            <i aria-hidden="true"></i>
+            <span>일몰 <strong>{{ formatLocalTime(weather.sunset) }}</strong></span>
+          </div>
         </div>
       </div>
     </article>
@@ -146,24 +151,6 @@ const visibility = computed(() => {
         <p>육안으로 확인 가능한 거리</p>
       </article>
 
-      <article class="highlight-card sun-card">
-        <div class="highlight-card-heading">
-          <span class="highlight-symbol sun-symbol" aria-hidden="true">☼</span>
-          <span>일출과 일몰</span>
-        </div>
-        <div class="sun-times">
-          <div>
-            <span>일출</span>
-            <strong>{{ formatLocalTime(weather.sunrise) }}</strong>
-          </div>
-          <i aria-hidden="true"></i>
-          <div>
-            <span>일몰</span>
-            <strong>{{ formatLocalTime(weather.sunset) }}</strong>
-          </div>
-        </div>
-        <p>선택 지역의 현지 시각 기준</p>
-      </article>
     </div>
   </section>
 </template>
