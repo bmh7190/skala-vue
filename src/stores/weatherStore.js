@@ -7,9 +7,7 @@ export const useWeatherStore = defineStore('weather', () => {
   const weatherCache = ref({})
 
   // 검색어 정규화: 앞뒤 공백·영문 대소문자로 인한 중복 호출 방지
-  const getWeather = (query) => {
-    return weatherCache.value[query.trim().toLowerCase()]
-  }
+  const getWeather = (query) => weatherCache.value[query.trim().toLowerCase()]
 
   // 상세 페이지의 URL 파라미터 대응을 위한 cityId 기준 조회
   const getWeatherById = (cityId) => {

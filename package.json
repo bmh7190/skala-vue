@@ -13,11 +13,16 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "apexcharts": "^6.7.0",
+    "apexmaps-geo": "^1.0.0",
     "axios": "^1.19.0",
     "element-plus": "^2.14.3",
+    "maplibre-gl": "^6.1.0",
     "pinia": "^4.0.2",
+    "topojson-client": "^3.1.0",
     "vue": "^3.5.40",
-    "vue-router": "^5.2.0"
+    "vue-router": "^5.2.0",
+    "vue3-apexcharts": "^1.11.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

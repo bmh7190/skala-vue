@@ -1,24 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
-import PracticeDay1View from '@/views/PracticeDay1View.vue'
-import PracticeDay2View from '@/views/PracticeDay2View.vue'
-import PracticeView from '@/views/PracticeView.vue'
-import WeatherAboutView from '@/views/WeatherAboutView.vue'
-import WeatherDetailView from '@/views/WeatherDetailView.vue'
-import WeatherHomeView from '@/views/WeatherHomeView.vue'
-import WeatherView from '@/views/WeatherView.vue'
-import PracticeDay3View from '@/views/PracticeDay3View.vue'
-import PracticeDay4View from '@/views/PracticeDay4View.vue'
+const NotFoundView = () => import('@/views/NotFoundView.vue')
+const PracticeDay1View = () => import('@/views/PracticeDay1View.vue')
+const PracticeDay2View = () => import('@/views/PracticeDay2View.vue')
+const PracticeDay3View = () => import('@/views/PracticeDay3View.vue')
+const PracticeDay4View = () => import('@/views/PracticeDay4View.vue')
+const PracticeView = () => import('@/views/PracticeView.vue')
+const WeatherAboutView = () => import('@/views/WeatherAboutView.vue')
+const WeatherDashboardAboutView = () => import('@/views/dashboard/WeatherDashboardAboutView.vue')
+const WeatherDashboardHomeView = () => import('@/views/dashboard/WeatherDashboardHomeView.vue')
+const WeatherDashboardView = () => import('@/views/dashboard/WeatherDashboardView.vue')
+const WeatherDetailView = () => import('@/views/WeatherDetailView.vue')
+const WeatherHomeView = () => import('@/views/WeatherHomeView.vue')
+const WeatherView = () => import('@/views/WeatherView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: HomeView,
+      component: WeatherDashboardView,
+      children: [
+        {
+          path: '',
+          name: 'WeatherDashboard',
+          component: WeatherDashboardHomeView,
+          meta: { keepAlive: true },
+        },
+        {
+          path: 'about',
+          name: 'WeatherDashboardAbout',
+          component: WeatherDashboardAboutView,
+        },
+      ],
     },
     {
       path: '/practice',

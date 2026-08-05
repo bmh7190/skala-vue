@@ -15,10 +15,8 @@ const router = useRouter()
 const weatherStore = useWeatherStore()
 
 // 역할 분리: API·화면 상태는 View, 페이지 간 재사용 결과는 Pinia에서 관리
-const initialWeatherList = ref([]) // 검색 초기화용 최초 API 조회 결과
-
-const weatherList = ref([]) // 현재 카드 영역 출력 목록
-
+const initialWeatherList = ref([])
+const weatherList = ref([])
 const cityName = ref('')
 const selectedCityId = ref(null)
 const selectedCityInfo = ref('카드를 클릭하거나 검색해보세요.')
@@ -37,7 +35,6 @@ const fetchWeatherByCoordinates = async (city) => {
       appid: API_KEY,
     },
   })
-
   const data = response.data
 
   return {
@@ -60,7 +57,6 @@ const fetchDefaultWeather = async () => {
   errorMessage.value = ''
 
   try {
-    // 일부 도시 요청 실패를 허용하는 개별 결과 처리
     const results = await Promise.allSettled(
       defaultCities.map((city) => fetchWeatherByCoordinates(city)),
     )
@@ -68,8 +64,6 @@ const fetchDefaultWeather = async () => {
       .filter((result) => result.status === 'fulfilled')
       .map((result) => result.value)
     weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
-
-    // 기본 도시 재검색을 위한 최초 API 결과 캐시
     initialWeatherList.value.forEach((city) => weatherStore.saveWeather(city.name, city))
 
     if (weatherList.value.length === 0) {
@@ -90,13 +84,9 @@ const handleSearch = async () => {
     errorMessage.value = '검색할 도시 이름을 입력하세요.'
     return
   }
-
-  if (isLoading.value) {
-    return
-  }
+  if (isLoading.value) return
 
   const cachedWeather = weatherStore.getWeather(query)
-
   if (cachedWeather) {
     weatherList.value = [cachedWeather]
     selectedCityId.value = null
@@ -111,20 +101,14 @@ const handleSearch = async () => {
   }
 
   console.log(`[Weather API] 새로 불러오기: ${query}`)
-
   isLoading.value = true
   errorMessage.value = ''
   selectedCityId.value = null
   selectedCityInfo.value = '날씨 정보를 검색하고 있습니다.'
 
   try {
-    // 검색어의 좌표 변환 후 실시간 날씨 조회
     const locationResponse = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
-      params: {
-        q: query,
-        limit: 1,
-        appid: API_KEY,
-      },
+      params: { q: query, limit: 1, appid: API_KEY },
     })
     const location = locationResponse.data[0]
 
@@ -148,7 +132,6 @@ const handleSearch = async () => {
     selectedCityInfo.value = '검색한 도시의 실시간 날씨입니다.'
   } catch (error) {
     const status = error.response?.status
-
     if (status === 401) {
       errorMessage.value = 'API 키가 유효하지 않거나 아직 활성화되지 않았습니다.'
     } else if (status === 429) {
@@ -156,7 +139,6 @@ const handleSearch = async () => {
     } else {
       errorMessage.value = '날씨 정보를 가져오지 못했습니다. 잠시 후 다시 시도하세요.'
     }
-
     selectedCityInfo.value = '도시를 검색해보세요.'
   } finally {
     isLoading.value = false
@@ -169,7 +151,6 @@ const selectCity = (item) => {
 }
 
 const showDetails = (item) => {
-  // 상세 새로고침용 API fallback 좌표 및 과제 5 탭 복원용 task 전달
   router.push({
     name: 'WeatherDetail',
     params: { cityId: item.id },
@@ -183,12 +164,8 @@ const showDetails = (item) => {
   })
 }
 
-// 검색어 초기화 시 API 재호출 없이 최초 조회 목록 복원
 watch(cityName, (query) => {
-  if (query.trim()) {
-    return
-  }
-
+  if (query.trim()) return
   weatherList.value = initialWeatherList.value.map((city) => ({ ...city }))
   selectedCityId.value = null
   selectedCityInfo.value = '카드를 클릭하거나 검색해보세요.'
@@ -208,20 +185,15 @@ onMounted(fetchDefaultWeather)
         @update-query="cityName = $event"
         @search="handleSearch"
       />
-
       <p v-if="!isConfigured" class="setup-message">
         `.env.local`에 `VITE_OPENWEATHER_API_KEY`를 설정해야 합니다.
       </p>
-      <p v-if="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </p>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </BaseDashboardCard>
 
     <BaseDashboardCard>
       <h3>🏙️ 지역별 날씨 현황</h3>
-
       <LoadingIndicator v-if="isLoading" message="실시간 날씨 정보를 불러오는 중입니다." />
-
       <template v-else>
         <WeatherCard
           v-for="item in weatherList"
@@ -234,9 +206,7 @@ onMounted(fetchDefaultWeather)
       </template>
     </BaseDashboardCard>
 
-    <div class="status-bar">
-      {{ selectedCityInfo }}
-    </div>
+    <div class="status-bar">{{ selectedCityInfo }}</div>
   </div>
 </template>
 
