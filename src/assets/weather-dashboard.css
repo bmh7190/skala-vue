@@ -401,7 +401,8 @@
   pointer-events: none;
 }
 
-.task-five-container .weather-card.weather-clear {
+.task-five-container .weather-card.weather-clear,
+.task-five-container .region-current-weather.weather-clear {
   background-image:
     linear-gradient(
       90deg,
@@ -414,7 +415,8 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-clouds {
+.task-five-container .weather-card.weather-clouds,
+.task-five-container .region-current-weather.weather-clouds {
   background-image:
     linear-gradient(90deg, rgba(8, 23, 40, 0.78), rgba(26, 43, 61, 0.48)),
     url('./weather-scenes/clouds.jpg');
@@ -422,7 +424,8 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-rain {
+.task-five-container .weather-card.weather-rain,
+.task-five-container .region-current-weather.weather-rain {
   background-image:
     linear-gradient(90deg, rgba(4, 16, 29, 0.78), rgba(8, 26, 44, 0.48)),
     url('./weather-scenes/rain.jpg');
@@ -430,7 +433,8 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-snow {
+.task-five-container .weather-card.weather-snow,
+.task-five-container .region-current-weather.weather-snow {
   background-image:
     linear-gradient(90deg, rgba(8, 29, 50, 0.8), rgba(26, 57, 83, 0.52)),
     url('./weather-scenes/snow.jpg');
@@ -459,7 +463,8 @@
   transform: translateX(12px);
 }
 
-.task-five-container .weather-card.weather-storm {
+.task-five-container .weather-card.weather-storm,
+.task-five-container .region-current-weather.weather-storm {
   background-image:
     linear-gradient(90deg, rgba(5, 12, 29, 0.75), rgba(28, 26, 57, 0.4)),
     url('./weather-scenes/storm.jpg');
@@ -467,7 +472,8 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-mist {
+.task-five-container .weather-card.weather-mist,
+.task-five-container .region-current-weather.weather-mist {
   background-image:
     linear-gradient(90deg, rgba(20, 40, 56, 0.82), rgba(54, 73, 86, 0.54)),
     url('./weather-scenes/mist.jpg');

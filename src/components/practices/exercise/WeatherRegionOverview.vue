@@ -15,11 +15,35 @@ const feelsLike = computed(() => props.weather.feelsLike ?? props.weather.temp)
 const { displayTemp, displayUnit } = useTemperature(temperature)
 const { displayTemp: displayFeelsLike } = useTemperature(feelsLike)
 
-const weatherIcon = computed(() => {
-  const status = props.weather.status
+const weatherTheme = computed(() => {
+  const status = String(props.weather.status ?? '')
 
-  if (status.includes('비') || status.includes('소나기')) return '🌧️'
+  if (status.includes('천둥') || status.includes('번개') || status.includes('뇌우')) {
+    return 'weather-storm'
+  }
+  if (status.includes('눈') || status.includes('진눈깨비')) return 'weather-snow'
+  if (status.includes('비') || status.includes('소나기') || status.includes('이슬비')) {
+    return 'weather-rain'
+  }
+  if (
+    status.includes('안개') ||
+    status.includes('박무') ||
+    status.includes('연무') ||
+    status.includes('황사')
+  ) {
+    return 'weather-mist'
+  }
+  if (status.includes('구름') || status.includes('흐림')) return 'weather-clouds'
+  return 'weather-clear'
+})
+
+const weatherIcon = computed(() => {
+  const status = String(props.weather.status ?? '')
+
+  if (status.includes('천둥') || status.includes('번개') || status.includes('뇌우')) return '⛈️'
   if (status.includes('눈')) return '🌨️'
+  if (status.includes('비') || status.includes('소나기')) return '🌧️'
+  if (status.includes('안개') || status.includes('박무') || status.includes('연무')) return '🌫️'
   if (status.includes('구름')) return '🌥️'
   if (status.includes('흐림')) return '☁️'
   return '☀️'
@@ -61,7 +85,7 @@ const visibility = computed(() => {
 
 <template>
   <section class="region-weather-overview" :aria-label="`${weather.name} 현재 날씨`">
-    <article class="region-current-weather">
+    <article class="region-current-weather" :class="weatherTheme">
       <div class="current-weather-heading">
         <div>
           <span class="current-location-label">
