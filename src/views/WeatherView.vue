@@ -1,23 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
+import UnitToggle from '@/components/practices/exercise/UnitToggle.vue'
 import WeatherComposition from '@/components/practices/exercise/WeatherComposition.vue'
 import WeatherMockup from '@/components/practices/exercise/WeatherMockup.vue'
 import WeatherParent from '@/components/practices/exercise/WeatherParent.vue'
+import WeatherHomeApiView from './WeatherHomeApiView.vue'
 
 const route = useRoute()
-const router = useRouter()
-const selectedTask = ref(route.path === '/weather' ? 1 : 4)
-
-const selectTask = (task) => {
-  if (task === 5) {
-    router.push({ name: 'WeatherDashboard' })
-    return
-  }
-
-  selectedTask.value = task
-}
+// 상세 이동 시 전달한 task 값을 활용한 과제 5 탭 복원
+const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather' ? 1 : 4)
 </script>
 
 <template>
@@ -32,7 +25,7 @@ const selectTask = (task) => {
           type="button"
           class="task-button"
           :class="{ active: selectedTask === task }"
-          @click="selectTask(task)"
+          @click="selectedTask = task"
         >
           과제 {{ task }}
         </button>
@@ -50,7 +43,7 @@ const selectTask = (task) => {
         <WeatherParent />
       </section>
 
-      <section v-else class="app-container">
+      <section v-else-if="selectedTask === 4" class="app-container">
         <div class="dashboard-wrapper">
           <h2>과제 4: 날씨 (라우터)</h2>
 
@@ -64,6 +57,24 @@ const selectTask = (task) => {
         </div>
       </section>
 
+      <section v-else class="app-container">
+        <div class="dashboard-wrapper">
+          <h2>과제 5: 스토어 적용</h2>
+
+          <nav class="navigation-bar" aria-label="날씨 페이지 메뉴">
+            <RouterLink to="/weather" class="nav-item">날씨 대시보드</RouterLink>
+            <span class="divider">|</span>
+            <RouterLink to="/weather/about" class="nav-item">서비스 소개</RouterLink>
+            <UnitToggle />
+          </nav>
+
+          <!-- 상세 화면 이동 전 검색 결과와 선택 상태 유지 -->
+          <KeepAlive>
+            <WeatherHomeApiView v-if="route.name === 'WeatherHome'" />
+          </KeepAlive>
+          <RouterView v-if="route.name !== 'WeatherHome'" />
+        </div>
+      </section>
     </div>
   </main>
 </template>

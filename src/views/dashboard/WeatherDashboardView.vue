@@ -2,9 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import UnitToggle from '@/components/practices/exercise/UnitToggle.vue'
-import '@/assets/exercise.css'
-import '@/assets/weather-dashboard.css'
+import UnitToggle from '@/components/dashboard/UnitToggle.vue'
+import '@/assets/dashboard/weather-dashboard.css'
 
 const isHeaderInitiallyVisible = ref(true)
 const route = useRoute()
