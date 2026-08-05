@@ -46,6 +46,14 @@ const activePracticePath = computed(() => route.path)
   background: #f5f7fa;
 }
 
+:global(body:has(#app > .practice-page)) {
+  background: #f5f7fa;
+}
+
+:global(#app:has(> .practice-page)) {
+  max-width: none;
+}
+
 .practice-header {
   width: 800px;
   max-width: 100%;
@@ -67,6 +75,9 @@ const activePracticePath = computed(() => route.path)
 }
 
 .practice-navigation-card :deep(.el-menu-item) {
+  min-width: 0;
+  flex: 1;
+  justify-content: center;
   height: 48px;
   line-height: 48px;
   font-weight: 650;

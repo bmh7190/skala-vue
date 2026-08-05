@@ -22,17 +22,18 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
 
         <el-radio-group v-model="selectedTask" class="task-navigation" aria-label="날씨 과제 선택">
           <el-radio-button
-          v-for="task in 5"
-          :key="task"
+            v-for="task in 5"
+            :key="task"
             :value="task"
-          >과제 {{ task }}</el-radio-button>
+          >
+            과제 {{ task }}
+          </el-radio-button>
         </el-radio-group>
       </el-card>
     </el-header>
 
     <el-main class="weather-content">
       <div class="weather-exercises">
-
         <section v-if="selectedTask === 1" class="app-container">
           <WeatherMockup />
         </section>
@@ -108,8 +109,16 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
   background: #f5f7fa;
 }
 
+:global(body:has(#app > .weather-page)) {
+  background: #f5f7fa;
+}
+
+:global(#app:has(> .weather-page)) {
+  max-width: none;
+}
+
 .weather-header {
-  width: min(900px, 100%);
+  width: min(1100px, 100%);
   padding: 0;
   margin: 0 auto 20px;
 }
@@ -123,7 +132,7 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
 }
 
 .weather-exercises {
-  width: min(900px, 100%);
+  width: min(1100px, 100%);
   margin: 0 auto;
 }
 
@@ -131,14 +140,33 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
   padding: 0;
 }
 
+.weather-content .app-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.weather-content :deep(.dashboard-wrapper) {
+  width: 100%;
+}
+
 .task-navigation {
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
   margin-top: 18px;
 }
 
+.task-navigation :deep(.el-radio-button) {
+  min-width: 0;
+  flex: 1;
+}
+
 .task-navigation :deep(.el-radio-button__inner) {
-  min-width: 104px;
+  width: 100%;
+  min-width: 0;
   font-weight: 650;
 }
 
@@ -160,6 +188,10 @@ const selectedTask = ref(route.query.task === '5' ? 5 : route.path === '/weather
 
   .weather-navigation-card :deep(.el-card__body) {
     padding: 16px 12px;
+  }
+
+  .weather-content .app-container {
+    padding: 20px 14px;
   }
 
   .task-navigation {
