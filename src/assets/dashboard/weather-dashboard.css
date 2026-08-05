@@ -334,68 +334,6 @@
   background: rgba(125, 211, 252, 0.28);
 }
 
-.task-five-container .weather-card.dashboard-mode {
-  position: relative;
-  display: flex;
-  margin: 0;
-  min-height: 156px;
-  padding: 15px;
-  overflow: hidden;
-  flex-direction: column;
-  border: 1px solid rgba(125, 211, 252, 0.12);
-  border-radius: 15px;
-  background: linear-gradient(135deg, rgba(25, 50, 82, 0.96), rgba(8, 20, 36, 0.98));
-  color: var(--dashboard-text);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.task-five-container .weather-card.dashboard-mode.region-card {
-  border-color: rgba(125, 211, 252, 0.24);
-}
-
-.task-five-container .weather-card.dashboard-mode.region-card:hover {
-  border-color: rgba(125, 211, 252, 0.46);
-}
-
-.task-five-container .weather-card.dashboard-mode:hover {
-  border-color: rgba(125, 211, 252, 0.32);
-  box-shadow:
-    inset 0 0 0 1px rgba(125, 211, 252, 0.08),
-    0 8px 20px rgba(2, 8, 23, 0.16);
-}
-
-.task-five-container .weather-card.dashboard-mode.selected {
-  border-color: rgba(56, 189, 248, 0.68);
-  box-shadow:
-    inset 3px 0 0 #38bdf8,
-    0 8px 22px rgba(2, 8, 23, 0.22);
-}
-
-.task-five-container .weather-card.dashboard-mode > :not(.weather-scene) {
-  position: relative;
-  z-index: 1;
-}
-
-.task-five-container .weather-scene {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  overflow: hidden;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.task-five-container .weather-scene::before,
-.task-five-container .weather-scene::after {
-  position: absolute;
-  content: '';
-  pointer-events: none;
-}
-
-.task-five-container .weather-card.weather-clear,
 .task-five-container .region-current-weather.weather-clear {
   background-image:
     linear-gradient(
@@ -409,7 +347,6 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-clouds,
 .task-five-container .region-current-weather.weather-clouds {
   background-image:
     linear-gradient(90deg, rgba(8, 23, 40, 0.78), rgba(26, 43, 61, 0.48)),
@@ -418,7 +355,6 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-rain,
 .task-five-container .region-current-weather.weather-rain {
   background-image:
     linear-gradient(90deg, rgba(4, 16, 29, 0.78), rgba(8, 26, 44, 0.48)),
@@ -427,7 +363,6 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-snow,
 .task-five-container .region-current-weather.weather-snow {
   background-image:
     linear-gradient(90deg, rgba(8, 29, 50, 0.8), rgba(26, 57, 83, 0.52)),
@@ -436,28 +371,6 @@
   background-size: cover;
 }
 
-.task-five-container .weather-snow .weather-scene::before,
-.task-five-container .weather-snow .weather-scene::after {
-  inset: -18% 0 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.8) 0 1px, transparent 2px),
-    radial-gradient(circle, rgba(224, 242, 254, 0.55) 0 1.5px, transparent 2.5px);
-  background-position:
-    4px 7px,
-    18px 24px;
-  background-size:
-    27px 31px,
-    43px 47px;
-  animation: dashboard-snow 5s linear infinite;
-}
-
-.task-five-container .weather-snow .weather-scene::after {
-  opacity: 0.45;
-  animation-duration: 8s;
-  transform: translateX(12px);
-}
-
-.task-five-container .weather-card.weather-storm,
 .task-five-container .region-current-weather.weather-storm {
   background-image:
     linear-gradient(90deg, rgba(5, 12, 29, 0.75), rgba(28, 26, 57, 0.4)),
@@ -466,132 +379,12 @@
   background-size: cover;
 }
 
-.task-five-container .weather-card.weather-mist,
 .task-five-container .region-current-weather.weather-mist {
   background-image:
     linear-gradient(90deg, rgba(20, 40, 56, 0.82), rgba(54, 73, 86, 0.54)),
     url('./weather-scenes/mist.jpg');
   background-position: center;
   background-size: cover;
-}
-
-@keyframes dashboard-snow {
-  from {
-    transform: translate3d(0, -24px, 0);
-  }
-  to {
-    transform: translate3d(8px, 36px, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .task-five-container .weather-snow .weather-scene::before,
-  .task-five-container .weather-snow .weather-scene::after {
-    animation: none;
-  }
-}
-
-.task-five-container .city-weather-header,
-.task-five-container .city-temperature-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.task-five-container .city-location-copy,
-.task-five-container .city-condition-copy {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-}
-
-.task-five-container .city-location-copy > span {
-  color: #7dd3fc;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-}
-
-.task-five-container .city-location-copy > strong {
-  margin-top: 2px;
-  color: var(--dashboard-text);
-  font-size: 15px;
-  font-weight: 750;
-}
-
-.task-five-container .weather-icon {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 13px;
-  background: rgba(8, 17, 31, 0.34);
-  font-size: 24px;
-}
-
-.task-five-container .city-temperature-row {
-  justify-content: flex-start;
-  margin-top: 8px;
-}
-
-.task-five-container .city-temperature {
-  color: var(--dashboard-text);
-  font-size: 35px;
-  font-weight: 550;
-  letter-spacing: -0.07em;
-  line-height: 1;
-}
-
-.task-five-container .city-condition-copy strong {
-  overflow: hidden;
-  color: var(--dashboard-text);
-  font-size: 11px;
-  font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.task-five-container .city-condition-copy {
-  flex: 1;
-}
-
-.task-five-container .city-condition-copy span {
-  margin-top: 3px;
-  color: var(--dashboard-muted);
-  font-size: 9px;
-}
-
-.task-five-container .city-weather-meta {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-top: auto;
-  padding-top: 9px;
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
-  color: #8292aa;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.task-five-container .weather-card.dashboard-mode .btn-detail {
-  position: static;
-  margin-left: auto;
-  padding: 4px 8px;
-  border: 1px solid var(--dashboard-border);
-  border-radius: 7px;
-  background: rgba(148, 163, 184, 0.08);
-  color: #cbd5e1;
-  font-size: 10px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.task-five-container .weather-card.dashboard-mode .btn-detail:hover {
-  border-color: rgba(56, 189, 248, 0.38);
-  color: #7dd3fc;
 }
 
 .task-five-container .map-panel {
@@ -1601,7 +1394,4 @@
     flex-direction: column;
   }
 
-  .task-five-container .city-weather-meta {
-    flex-wrap: wrap;
-  }
 }
