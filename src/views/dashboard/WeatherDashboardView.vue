@@ -3,7 +3,6 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import UnitToggle from '@/components/dashboard/common/UnitToggle.vue'
-import '@/assets/dashboard/weather-dashboard.css'
 
 const isHeaderInitiallyVisible = ref(true)
 const route = useRoute()
@@ -171,7 +170,7 @@ onBeforeUnmount(() => {
   gap: 12px;
 }
 
-.full-page-dashboard {
+.app-container.task-five-container.full-page-dashboard {
   width: 100%;
   max-width: none;
   min-height: 100vh;
