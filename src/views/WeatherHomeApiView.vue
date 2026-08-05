@@ -288,6 +288,81 @@ const selectCity = (item) => {
   selectedCityInfo.value = `${item.name}이 선택되었습니다.`
 }
 
+const getMapWeatherCacheKey = (location) =>
+  `map:${location.countryCode || 'world'}:${location.mapKey}`
+
+const resolveMapLocation = (area) => {
+  const knownLocations = selectedCountryCode.value
+    ? countryRegions[selectedCountryCode.value] ?? []
+    : defaultCountries
+
+  return knownLocations.find((location) => location.mapKey === area.mapKey) ?? area
+}
+
+const addMapWeather = (weather) => {
+  weatherList.value = [
+    ...weatherList.value.filter((item) => item.mapKey !== weather.mapKey),
+    weather,
+  ]
+
+  if (isCountryView.value) {
+    countryWeatherList.value = [
+      ...countryWeatherList.value.filter((item) => item.mapKey !== weather.mapKey),
+      weather,
+    ]
+  }
+
+  selectCity(weather)
+}
+
+// 지도 영역 선택: 현재 목록, Pinia 캐시, API 순서로 날씨 조회
+const handleMapAreaSelect = async (area) => {
+  if (Number.isFinite(area.temp)) {
+    selectCity(area)
+    return
+  }
+
+  if (isLoading.value) return
+
+  const location = resolveMapLocation(area)
+  const cacheKey = getMapWeatherCacheKey(location)
+  const cachedWeather = weatherStore.getWeather(cacheKey)
+
+  if (cachedWeather) {
+    addMapWeather(cachedWeather)
+    return
+  }
+
+  if (!API_KEY) {
+    errorMessage.value = '.env.local에 OpenWeather API 키를 설정하세요.'
+    return
+  }
+
+  console.log(`[Weather API] 지도에서 새로 불러오기: ${location.name}`)
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    const weather = await fetchWeatherByCoordinates(location)
+
+    weatherStore.saveWeather(cacheKey, weather)
+    weatherStore.saveWeather(location.name, weather)
+    addMapWeather(weather)
+  } catch (error) {
+    const status = error.response?.status
+
+    if (status === 401) {
+      errorMessage.value = 'API 키가 유효하지 않거나 아직 활성화되지 않았습니다.'
+    } else if (status === 429) {
+      errorMessage.value = 'API 요청 한도를 초과했습니다. 잠시 후 다시 시도하세요.'
+    } else {
+      errorMessage.value = '선택한 영역의 날씨를 불러오지 못했습니다.'
+    }
+  } finally {
+    isLoading.value = false
+  }
+}
+
 const closeSelectedWeather = () => {
   if (isSearchView.value) {
     returnToWorld()
@@ -313,13 +388,15 @@ const handleListSelect = (item) => {
   selectCity(item)
 }
 
-const handleMapCountrySelect = (country) => {
+const handleMapCountrySelect = (area) => {
+  const country = defaultCountries.find((item) => item.mapKey === area.mapKey) ?? area
+
   if (hasCountryRegions(country)) {
     enterCountry(country)
     return
   }
 
-  selectCity(country)
+  handleMapAreaSelect(country)
 }
 
 
@@ -519,7 +596,7 @@ onMounted(fetchDefaultWeather)
             :selected-city-id="selectedCityId"
             :selected-country-code="selectedCountryCode"
             :selected-country-name="selectedCountry?.name"
-            @select-city="selectCity"
+            @select-city="handleMapAreaSelect"
             @select-country="handleMapCountrySelect"
           />
 
@@ -539,7 +616,7 @@ onMounted(fetchDefaultWeather)
           :selected-city-id="selectedCityId"
           :selected-country-code="selectedCountryCode"
           :selected-country-name="selectedCountry?.name"
-          @select-city="selectCity"
+          @select-city="handleMapAreaSelect"
           @select-country="handleMapCountrySelect"
         />
 

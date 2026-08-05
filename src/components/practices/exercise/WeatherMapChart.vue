@@ -424,25 +424,32 @@ const showPopup = (event) => {
     : displayName
   description.textContent = weather
     ? `${weather.status} · 습도 ${weather.humidity}% · 풍속 ${weather.wind}m/s`
-    : '날씨 정보가 준비된 영역만 선택할 수 있습니다.'
+    : '클릭해 실시간 날씨를 불러올 수 있습니다.'
   content.append(title, description)
 
   popup.setLngLat(event.lngLat).setDOMContent(content).addTo(map)
 }
 
 const handleMapClick = (event) => {
-  const mapKey = event.features?.[0]?.properties?.mapKey
-  const weatherId = event.features?.[0]?.properties?.weatherId
+  const properties = event.features?.[0]?.properties
+  const mapKey = properties?.mapKey
+  const weatherId = properties?.weatherId
   const weather = weatherId
     ? props.weatherList.find((item) => String(item.id) === weatherId)
     : findWeather(mapKey)
-
-  if (!weather) return
+  const selectedArea = weather ?? {
+    id: `map-${props.selectedCountryCode || 'world'}-${mapKey}`,
+    name: properties?.displayName ?? mapKey,
+    countryCode: props.selectedCountryCode || mapKey,
+    mapKey,
+    lat: event.lngLat.lat,
+    lon: event.lngLat.lng,
+  }
 
   if (props.selectedCountryCode) {
-    emit('select-city', weather)
+    emit('select-city', selectedArea)
   } else {
-    emit('select-country', weather)
+    emit('select-country', selectedArea)
   }
 }
 
