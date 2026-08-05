@@ -135,21 +135,29 @@ const chartOptions = computed(() => ({
       <p>3시간 간격 예보</p>
     </header>
 
-    <VueApexCharts
-      type="area"
-      :height="height"
-      :options="chartOptions"
-      :series="chartSeries"
-    />
+    <div class="forecast-chart-content">
+      <VueApexCharts
+        type="area"
+        :height="height"
+        :options="chartOptions"
+        :series="chartSeries"
+      />
+    </div>
   </section>
 </template>
 
 <style scoped>
 .forecast-chart-card {
   padding: 20px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
+  border: 1px solid var(--forecast-panel-border, rgba(148, 163, 184, 0.16));
+  border-radius: var(--forecast-panel-radius, 18px);
+  background: var(
+    --forecast-panel-background,
+    linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96))
+  );
+  -webkit-backdrop-filter: var(--forecast-panel-backdrop, none);
+  backdrop-filter: var(--forecast-panel-backdrop, none);
+  box-shadow: var(--forecast-panel-shadow, none);
 }
 
 .forecast-chart-heading {
@@ -170,6 +178,12 @@ const chartOptions = computed(() => ({
   margin: 5px 0 0;
   color: #8291a8;
   font-size: 12px;
+}
+
+.forecast-chart-content {
+  overflow: hidden;
+  padding-top: 4px;
+  background: transparent;
 }
 
 @media (max-width: 600px) {

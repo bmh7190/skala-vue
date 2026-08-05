@@ -132,28 +132,26 @@ const dailyForecastList = computed(() => {
 
 <style scoped>
 .daily-forecast-card {
+  display: flex;
+  min-height: 0;
   height: 100%;
+  flex-direction: column;
   padding: 14px;
-  overflow-y: auto;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 18px;
-  background: linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96));
-  scrollbar-color: rgba(125, 211, 252, 0.32) transparent;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-}
-
-.daily-forecast-card::-webkit-scrollbar {
-  width: 5px;
-}
-
-.daily-forecast-card::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(125, 211, 252, 0.28);
+  overflow: hidden;
+  border: 1px solid var(--forecast-panel-border, rgba(148, 163, 184, 0.16));
+  border-radius: var(--forecast-panel-radius, 18px);
+  background: var(
+    --forecast-panel-background,
+    linear-gradient(155deg, rgba(20, 35, 58, 0.94), rgba(12, 23, 40, 0.96))
+  );
+  -webkit-backdrop-filter: var(--forecast-panel-backdrop, none);
+  backdrop-filter: var(--forecast-panel-backdrop, none);
+  box-shadow: var(--forecast-panel-shadow, none);
 }
 
 .daily-forecast-heading {
   display: flex;
+  flex: 0 0 auto;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
@@ -174,7 +172,24 @@ const dailyForecastList = computed(() => {
 
 .daily-forecast-grid {
   display: grid;
+  min-height: 0;
+  flex: 1;
   gap: 0;
+  padding: 0 10px;
+  overflow-y: auto;
+  background: transparent;
+  scrollbar-color: rgba(125, 211, 252, 0.32) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.daily-forecast-grid::-webkit-scrollbar {
+  width: 5px;
+}
+
+.daily-forecast-grid::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.28);
 }
 
 .daily-weather-item {
@@ -183,7 +198,8 @@ const dailyForecastList = computed(() => {
   align-items: center;
   gap: 8px;
   min-width: 0;
-  padding: 9px 3px;
+  min-height: 76px;
+  padding: 14px 4px;
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
